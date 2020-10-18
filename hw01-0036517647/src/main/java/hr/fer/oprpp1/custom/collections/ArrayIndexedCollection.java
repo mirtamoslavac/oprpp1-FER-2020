@@ -3,6 +3,7 @@ package hr.fer.oprpp1.custom.collections;
 import java.util.Objects;
 import java.util.Arrays;
 import static java.lang.Math.max;
+import static java.lang.System.arraycopy;
 
 /**
  * The {@code ArrayIndexedCollection} class represents the implementation of a resizable array-backed {@link Collection} of {@code Object} instances.
@@ -162,7 +163,7 @@ public class ArrayIndexedCollection extends Collection {
         position = Objects.checkIndex(position, this.size + 1);
         checkCapacity();
 
-        if (this.size - position >= 0) System.arraycopy(this.elements, position, this.elements, position + 1, this.size - position);
+        if (this.size - position >= 0) arraycopy(this.elements, position, this.elements, position + 1, this.size - position);
 
         this.elements[position] = value;
         this.size++;
