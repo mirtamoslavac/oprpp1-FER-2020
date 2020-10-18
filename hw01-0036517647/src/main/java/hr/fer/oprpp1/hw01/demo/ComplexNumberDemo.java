@@ -1,6 +1,5 @@
 package hr.fer.oprpp1.hw01.demo;
 
-import hr.fer.oprpp1.custom.collections.ArrayIndexedCollection;
 import hr.fer.oprpp1.hw01.ComplexNumber;
 
 /**
