@@ -98,4 +98,22 @@ public interface Collection {
      */
     ElementsGetter createElementsGetter();
 
+    /**
+     * Adds all elements of the given collection {@code col} that are accepted by the given {@code tester} at the end of the current collection.
+     *
+     * @param col collections whose elements could to be added to the current collection.
+     * @param tester {@link Tester} instance that checks for each element of {@code col} whether it passes the implemented test.
+     * @throws NullPointerException when the given collection or tester are {@code null}.
+     */
+    default void addAllSatisfying(Collection col, Tester tester) {
+        if (col == null) throw new NullPointerException("The given collection cannot be null!");
+        if (tester == null) throw new NullPointerException("The given tester cannot be null!");
+
+        col.createElementsGetter().processRemaining(value -> {
+            if (tester.test(value)) {
+                this.add(value);
+            }
+        });
+    }
+
 }
