@@ -14,7 +14,7 @@ import static java.lang.System.arraycopy;
  *
  * @author mirtamoslavac
  */
-public class ArrayIndexedCollection implements Collection {
+public class ArrayIndexedCollection implements List {
 
     /**
      * An array of objects stored in the current collection.
@@ -121,19 +121,6 @@ public class ArrayIndexedCollection implements Collection {
 
         checkCapacity();
         this.elements[size++] = value;
-    }
-
-    /**
-     * Calls the process function of the passed {@link Processor} instance for every element of the {@code elements} array of the current collection.
-     * The elements are called in the order they appear in the {@code elements} array.
-     *
-     * @param processor {@link Processor} instance that is processes objects within the current collection with an operation connected to that instance.
-     */
-    @Override
-    public void forEach(Processor processor) {
-        for (int i = 0, elementNumber = this.size; i < elementNumber; i++) {
-            processor.process(this.elements[i]);
-        }
     }
 
     /**

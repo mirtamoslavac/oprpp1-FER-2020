@@ -1,9 +1,6 @@
 package hr.fer.oprpp1.custom.collections.demo;
 
-import hr.fer.oprpp1.custom.collections.ArrayIndexedCollection;
-import hr.fer.oprpp1.custom.collections.Collection;
-import hr.fer.oprpp1.custom.collections.ElementsGetter;
-import hr.fer.oprpp1.custom.collections.LinkedListIndexedCollection;
+import hr.fer.oprpp1.custom.collections.*;
 
 import java.util.NoSuchElementException;
 
@@ -149,6 +146,22 @@ public class ElementsGetterDemo {
         col2.addAllSatisfying(col1, new EvenIntegerTester());
 
         col2.forEach(System.out::println);
+
+        System.out.println("\n\nDEMO 9\n-----------------");
+        List col1list = new ArrayIndexedCollection();
+        List col2list = new LinkedListIndexedCollection();
+        col1list.add("Ivana");
+        col2list.add("Jasna");
+        Collection col3 = col1list;
+        Collection col4 = col2list;
+        col1list.get(0);
+        col2list.get(0);
+        //col3.get(0); // neće se prevesti! Razumijete li zašto?
+        //col4.get(0); // neće se prevesti! Razumijete li zašto?
+        col1list.forEach(System.out::println); // Ivana
+        col2list.forEach(System.out::println); // Jasna
+        col3.forEach(System.out::println); // Ivana
+        col4.forEach(System.out::println); // Jasna
     }
 
 }

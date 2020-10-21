@@ -11,7 +11,7 @@ import java.util.Objects;
  * @author mirtamoslavac
  * @version 1.0
  */
-public class LinkedListIndexedCollection implements Collection {
+public class LinkedListIndexedCollection implements List {
 
     /**
      * {@code ListNode} is a private static class that represents a single node within a {@link LinkedListIndexedCollection}.
@@ -263,21 +263,6 @@ public class LinkedListIndexedCollection implements Collection {
         }
 
         return newArray;
-    }
-
-    /**
-     * Calls the process function of the passed {@link Processor} instance for every element of the {@code} array of the current collection.
-     * The elements are called in the order they are connected within the linked-list.
-     *
-     * @param processor {@link Processor} instance that is processes objects within the current collection with an operation connected to that instance.
-     */
-    @Override
-    public void forEach(Processor processor) {
-        ListNode currentNode = this.first;
-        while(currentNode != null){
-            processor.process(currentNode.value);
-            currentNode = currentNode.next;
-        }
     }
 
     /**

@@ -57,11 +57,17 @@ public interface Collection {
     Object[] toArray();
 
     /**
-     * Calls {@link Processor#process(Object)} of for each element of this collection.
+     * Calls {@link Processor#process(Object)} of for each element of the current collection.
+     * The elements are called in the order they appear in the collection.
      *
-     * @param processor processor that performs a process for every object within the current collection.
+     * @param processor {@link Processor} instance that performs a process for every object within the current collection.
+     * @throws NullPointerException when {@code processor} is {@code null}.
      */
-    void forEach(Processor processor);
+    default void forEach(Processor processor) {
+        if (processor == null) throw new NullPointerException("The given processor cannot be null!");
+
+        this.createElementsGetter().processRemaining(processor);
+    }
 
     /**
      * Adds all elements from the given collection into the current collection.
