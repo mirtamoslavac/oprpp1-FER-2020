@@ -185,7 +185,7 @@ public class ArrayIndexedCollection implements Collection {
          * @throws NullPointerException when the given collection is {@code null}.
          */
         private ArrayElementsGetter(ArrayIndexedCollection arrayCollection) {
-            if (arrayCollection == null) throw new NullPointerException("The collection cannot be null!");
+            if (arrayCollection == null) throw new NullPointerException("The given collection cannot be null!");
             this.arrayCollection = arrayCollection;
             this.toBeFetched = 0;
             this.savedModificationCount = arrayCollection.modificationCount;

@@ -330,7 +330,7 @@ public class LinkedListIndexedCollection implements Collection {
          * @throws NullPointerException when the given collection is {@code null}.
          */
         private LinkedListElementsGetter(LinkedListIndexedCollection linkedListCollection) {
-            if (linkedListCollection == null) throw new NullPointerException("The collection cannot be null!");
+            if (linkedListCollection == null) throw new NullPointerException("The given collection cannot be null!");
             this.linkedListCollection = linkedListCollection;
             this.toBeFetched = 0;
             this.savedModificationCount = this.linkedListCollection.modificationCount;

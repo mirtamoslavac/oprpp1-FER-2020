@@ -18,8 +18,22 @@ public interface ElementsGetter {
     /**
      * Fetches the first element of the collection that hasn't yet been fetched.
      *
+     * @throws java.util.ConcurrentModificationException when attempting to fetch an element after the collection of the getter had been modified.
      * @throws java.util.NoSuchElementException when trying to fetch an element, but no unfetched elements are left.
      * @return element of the collection that hasn't been fetched
      */
     Object getNextElement();
+
+    /**
+     * Calls a given {@link Processor} instance on all remaining unfetched elements of the collection.
+
+     * @param p processor used to process remaining elements.
+     * @throws NullPointerException when the given processor is {@code null}.
+     */
+    default void processRemaining(Processor p) {
+        if (p == null) throw new NullPointerException("The given processor cannot be null!");
+        while (this.hasNextElement()) {
+            p.process(getNextElement());
+        }
+    }
 }
