@@ -2,9 +2,11 @@ package hr.fer.oprpp1.hw02.prob1;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tester class taken from this homework's PDF dedicated to demonstrating the workings of {@link Lexer}.
+ */
 public class Prob1Test {
 
 	@Test
@@ -226,7 +228,7 @@ public class Prob1Test {
 		Lexer lexer = new Lexer("");
 //		lexer.setState(LexerState.EXTENDED);
 
-		assertNotNull(lexer.nextToken(), "Token was expected but null was returned."); 
+		assertNotNull(lexer.nextToken(), "Token was expected but null was returned.");
 	}
 
 	@Test
@@ -277,13 +279,13 @@ public class Prob1Test {
 		checkToken(lexer.nextToken(), new Token(TokenType.NUMBER, Long.valueOf(3)));
 		checkToken(lexer.nextToken(), new Token(TokenType.SYMBOL, Character.valueOf('#')));
 
-//		lexer.setState(LexerState.EXTENDED);
+		lexer.setState(LexerState.EXTENDED);
 
 		checkToken(lexer.nextToken(), new Token(TokenType.WORD, "Ivana26\\a"));
 		checkToken(lexer.nextToken(), new Token(TokenType.WORD, "463abc"));
 		checkToken(lexer.nextToken(), new Token(TokenType.SYMBOL, Character.valueOf('#')));
 
-//		lexer.setState(LexerState.BASIC);
+		lexer.setState(LexerState.BASIC);
 
 		checkToken(lexer.nextToken(), new Token(TokenType.WORD, "zzz"));
 		checkToken(lexer.nextToken(), new Token(TokenType.EOF, null));

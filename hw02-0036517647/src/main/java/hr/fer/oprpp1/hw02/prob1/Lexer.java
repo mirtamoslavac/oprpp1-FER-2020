@@ -1,13 +1,16 @@
 package hr.fer.oprpp1.hw02.prob1;
 
 /**
- * The {@code Lexer} class represents a
+ * The {@code Lexer} class represents a program performing lexical analysis.
+ *
+ * @author mirtamoslavac
+ * @version 1.0
  */
 public class Lexer {
     /**
      * Input text for the current lexer.
      */
-    private char[] data;
+    private final char[] data;
 
     /**
      * The last generated token within the current lexer.
@@ -20,19 +23,14 @@ public class Lexer {
     private int currentIndex;
 
     /**
-     *
+     * Defined boundary that is used to regulate lexer state.
      */
     private static final char EXTENDED_STATE_BOUNDARY = '#';
 
     /**
-     *
+     * The current state of the current lexer.
      */
     private LexerState state;
-
-    /**
-     *
-     */
-    private int boundaryCounter;
 
     /**
      * Creates a new {@code Lexer} instance for the given input text.
@@ -46,20 +44,19 @@ public class Lexer {
         currentIndex = 0;
         token = null;
         state = LexerState.BASIC;
-        boundaryCounter = 0;
     }
 
     /**
-     * Generates the next token from the input text and returns it.
+     * Generates the next token from the input text, depending on the current {@code state}, and returns it.
      *
-     * @throws LexerException when trying to fetch a new token after obtaining EOF as the previous token's type.
+     * @throws LexerException when trying to fetch a new token after obtaining EOF as the previous token's type or when unable to generate a token.
      * @return a new {@link Token} instance.
      */
     public Token nextToken() {
         if (this.token != null && this.token.getType() == TokenType.EOF) throw new LexerException("Cannot tokenize after reading EOF!");
 
         if (this.isEOF(this.currentIndex)) return this.token;
-        skipWhitespace();
+        this.skipWhitespace();
         if (this.isEOF(this.currentIndex)) return this.token;
 
         if (this.state == LexerState.EXTENDED) {
@@ -67,43 +64,63 @@ public class Lexer {
             if (extendedToken != null) return extendedToken;
         }
 
-        if (this.data[this.currentIndex] == '#' && ++this.boundaryCounter % 2 != 0) this.state = LexerState.EXTENDED;
-
         if (Character.isLetter(this.data[this.currentIndex]) || this.data[this.currentIndex] == '\\') return tokenizeWord();
 
         if (Character.isDigit(this.data[this.currentIndex])) return tokenizeNumber();
 
         if (!Character.isLetter(this.data[this.currentIndex]) || !Character.isDigit(this.data[this.currentIndex])) return tokenizeSymbol();
 
-        return null;
+        throw new LexerException("Cannot generate a token!");
     }
 
     /**
      * Fetches the last generated token.
      *
+     * @throws LexerException when trying to fetch the last token within the lexer that hasn't tokenized anything yet.
      * @return last generated token.
      */
     public Token getToken() {
+        if (this.token == null) throw new LexerException("Cannot get last token when nothing has been tokenized yet!");
         return this.token;
     }
 
+    /**
+     * Sets the lexer state to the given {@code state}.
+     *
+     * @param state new lexer state of the current lexer.
+     * @throws NullPointerException when the given {@code state} is {@code null}.
+     */
     public void setState(LexerState state) {
         if (state == null) throw new NullPointerException("The state cannot be set to null");
         this.state = state;
     }
 
+    /**
+     * Skips all whitespace characters in the {@code data} array until encountering a non-whitespace character;
+     */
     private void skipWhitespace() {
         for (int i = this.currentIndex, dataLength = this.data.length; i < dataLength; i++, this.currentIndex++) {
-            if (this.currentIndex == this.data.length || !this.isWhitespace(this.data[currentIndex])) {
-                break;
-            }
+            if (this.currentIndex == this.data.length || !this.isWhitespace(this.data[this.currentIndex])) break;
         }
     }
 
+    /**
+     * Determines whether the given {@code character} is a whitespace character.
+     *
+     * @param character char that is to be checked.
+     * @return {@code true} if the given {@code character} is a whitespace character, {@code false} otherwise.
+     */
     private boolean isWhitespace(char character) {
         return character == ' ' || character == '\r' || character == '\n' || character == '\t';
     }
 
+    /**
+     * Determines whether the given {@code index} is over the boundaries of the {@code data} array and
+     * is a part of the decision whether the tokenization of an EOF token is to be performed.
+     *
+     * @param index int that is to be checked.
+     * @return {@code true} if the given {@code character}, {@code false} otherwise.
+     */
     private boolean isEOF(int index) {
         if (index >= this.data.length) {
             this.token = new Token(TokenType.EOF, null);
@@ -112,6 +129,12 @@ public class Lexer {
         return false;
     }
 
+    /**
+     * Creates a new word {@link Token} instance.
+     *
+     * @throws LexerException when invalid escaping is attempted.
+     * @return word {@link Token}.
+     */
     private Token tokenizeWord() {
         StringBuilder sb = new StringBuilder();
 
@@ -146,6 +169,12 @@ public class Lexer {
         return new Token(TokenType.WORD, sb.toString());
     }
 
+    /**
+     * Creates a new number {@link Token} instance.
+     *
+     * @throws LexerException when the generated number cannot be parsed into a long.
+     * @return number {@link Token}.
+     */
     private Token tokenizeNumber() {
         StringBuilder sb = new StringBuilder();
 
@@ -161,7 +190,6 @@ public class Lexer {
             }
 
             sb.append(this.data[i]);
-
         }
 
         this.currentIndex++;
@@ -170,22 +198,30 @@ public class Lexer {
             this.token =  new Token(TokenType.NUMBER, Long.parseLong(sb.toString()));
             return this.token;
         } catch (NumberFormatException e) {
-            throw new LexerException("The number trying to be tokenized is too big for a long!");
+            throw new LexerException("The number trying to be tokenized cannot be parsed into a long!");
         }
-
-
     }
 
+    /**
+     * Creates a new symbol {@link Token} instance.
+     *
+     * @return symbol {@link Token}.
+     */
     private Token tokenizeSymbol() {
         this.token = new Token(TokenType.SYMBOL, this.data[currentIndex++]);
         return this.token;
     }
 
+    /**
+     * Creates a new word {@link Token} instance within the {@code LexerState.EXTENDED} state.
+     *
+     * @return word {@link Token}.
+     */
     private Token tokenizeStringOfCharactersAsWord() {
         StringBuilder sb = new StringBuilder();
 
         for (int i = this.currentIndex, dataLength = this.data.length; i < dataLength; i++, this.currentIndex++) {
-            if (this.data[i] == '#') {
+            if (this.data[i] == EXTENDED_STATE_BOUNDARY) {
                 this.state = LexerState.BASIC;
                 if (sb.isEmpty()) {
                     return null;

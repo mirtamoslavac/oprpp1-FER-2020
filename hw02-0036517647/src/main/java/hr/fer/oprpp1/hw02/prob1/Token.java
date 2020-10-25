@@ -2,6 +2,9 @@ package hr.fer.oprpp1.hw02.prob1;
 
 /**
  * The {@code Token} class represents type-value pair token instance within a given text.
+ *
+ * @author mirtamoslavac
+ * @version 1.0
  */
 public class Token {
 
@@ -16,11 +19,16 @@ public class Token {
     private final Object value;
 
     /**
-     * Creates a new token instance with given type-value pair.
+     * Creates a new {@code Token} instance with given type-value pair.
+     *
      * @param type one of possible types from {@link TokenType}.
      * @param value string of characters in accordance with the given {@code type}.
+     * @throws NullPointerException when {@code type} or {@code value} is {@code null}.
      */
     public Token(TokenType type, Object value) {
+        if (type == null) throw new NullPointerException("The token type cannot be null");
+        if (type != TokenType.EOF && value == null) throw new NullPointerException("The value of the token cannot be null if its type is not EOF");
+
         this.type = type;
         this.value = value;
     }

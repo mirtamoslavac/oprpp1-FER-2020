@@ -2,6 +2,9 @@ package hr.fer.oprpp1.hw02.prob1;
 
 /**
  * The {@code TokenType} enumeration states all allowed token types.
+ *
+ * @author mirtamoslavac
+ * @version 1.0
  */
 public enum TokenType {
     /**

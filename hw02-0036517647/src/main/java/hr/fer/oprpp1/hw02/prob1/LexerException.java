@@ -1,7 +1,7 @@
 package hr.fer.oprpp1.hw02.prob1;
 
 /**
- * Thrown to indicate that one is accessing .
+ * Thrown to indicate that something illegal happened while tokenizing.
  *
  * @author  mirtamoslavac
  * @version 1.0
