@@ -34,7 +34,7 @@ public interface Collection {
     /**
      * Determines whether this current collection contains the given object.
      *
-     * @param value object that is to be checked whether it exists in the current collection, can be passed as null.
+     * @param value object that is to be checked whether it exists in the current collection, can be passed as {@code null}.
      * @return {@code true} only if the collection contains given value, {@code false} otherwise.
      */
     boolean contains(Object value);
@@ -64,7 +64,7 @@ public interface Collection {
      * @throws NullPointerException when {@code processor} is {@code null}.
      */
     default void forEach(Processor processor) {
-        if (processor == null) throw new NullPointerException("The given processor cannot be null!");
+        if (processor == null) throw new NullPointerException("The given processor cannot be {@code null}!");
 
         this.createElementsGetter().processRemaining(processor);
     }
