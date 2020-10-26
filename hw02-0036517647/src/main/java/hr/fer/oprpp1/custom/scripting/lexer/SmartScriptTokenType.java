@@ -12,14 +12,48 @@ public enum SmartScriptTokenType {
      */
     EOF,
 
-    VARIABLE,
+    /**
+     * Variable or tag name within a tag.
+     */
+    IDENTIFIER,
+
+    /**
+     * Constant integer value within a tag.
+     */
     INTEGER,
+
+    /**
+     * Constant double value within a tag.
+     */
     DOUBLE,
+
+    /**
+     * Textual data outside any tag.
+     */
     STRING_TEXT,
+
+    /**
+     * Textual data surrounded with double quotation marks within a tag.
+     */
     STRING_TAG,
+
+    /**
+     * Function name within a tag.
+     */
     FUNCTION,
+
+    /**
+     * Operator within a tag.
+     */
     OPERATOR,
+
+    /**
+     * Start of a tag.
+     */
     TAG_START,
+
+    /**
+     * End of a tag.
+     */
     TAG_END,
-    TAG_NAME
 }

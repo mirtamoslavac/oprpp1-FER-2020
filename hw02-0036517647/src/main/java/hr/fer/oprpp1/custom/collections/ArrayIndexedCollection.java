@@ -92,17 +92,13 @@ public class ArrayIndexedCollection implements List {
         this.size = other.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int size(){
         return this.size;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Object[] toArray() {
         return Arrays.copyOf(this.elements, this.size);
@@ -134,9 +130,6 @@ public class ArrayIndexedCollection implements List {
         this.modificationCount++;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ElementsGetter createElementsGetter() {
         return new ArrayElementsGetter(this);
@@ -178,9 +171,7 @@ public class ArrayIndexedCollection implements List {
             this.savedModificationCount = arrayCollection.modificationCount;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+
         @Override
         public boolean hasNextElement() {
             if (this.savedModificationCount != this.arrayCollection.modificationCount) {
@@ -190,9 +181,7 @@ public class ArrayIndexedCollection implements List {
             return this.toBeFetched < this.arrayCollection.size;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+
         @Override
         public Object getNextElement() {
             if (this.savedModificationCount != this.arrayCollection.modificationCount) {
@@ -202,7 +191,7 @@ public class ArrayIndexedCollection implements List {
                 throw new NoSuchElementException("There are no elements in this collection that remain unfetched!");
             }
 
-            return this.arrayCollection.get(toBeFetched++);
+            return this.arrayCollection.get(this.toBeFetched++);
         }
     }
 
@@ -278,9 +267,7 @@ public class ArrayIndexedCollection implements List {
         this.modificationCount++;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean remove(Object value) {
         int index = this.indexOf(value);
@@ -291,9 +278,7 @@ public class ArrayIndexedCollection implements List {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean contains(Object value) {
         return this.indexOf(value) != -1;

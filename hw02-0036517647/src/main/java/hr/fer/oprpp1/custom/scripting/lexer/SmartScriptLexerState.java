@@ -11,6 +11,7 @@ public enum SmartScriptLexerState {
      * Standard lexer state.
      */
     TEXT,
+
     /**
      * State when within the tag syntax.
      */

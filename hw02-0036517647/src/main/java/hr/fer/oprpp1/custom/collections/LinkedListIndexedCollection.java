@@ -197,9 +197,7 @@ public class LinkedListIndexedCollection implements List {
         this.modificationCount++;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int size() {
         return this.size;
@@ -228,17 +226,13 @@ public class LinkedListIndexedCollection implements List {
         this.modificationCount++;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean contains(Object value) {
         return indexOf(value) != -1;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean remove(Object value) {
         int index = this.indexOf(value);
@@ -249,9 +243,7 @@ public class LinkedListIndexedCollection implements List {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Object[] toArray() {
         Object[] newArray = new Object[this.size];
@@ -277,9 +269,7 @@ public class LinkedListIndexedCollection implements List {
         this.modificationCount++;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public ElementsGetter createElementsGetter() {
         return new LinkedListIndexedCollection.LinkedListElementsGetter(this);
@@ -321,9 +311,7 @@ public class LinkedListIndexedCollection implements List {
             this.savedModificationCount = this.linkedListCollection.modificationCount;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+
         @Override
         public boolean hasNextElement() {
             if (this.savedModificationCount != this.linkedListCollection.modificationCount) {
@@ -333,9 +321,7 @@ public class LinkedListIndexedCollection implements List {
             return this.toBeFetched < this.linkedListCollection.size;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+
         @Override
         public Object getNextElement() {
             if (this.savedModificationCount != this.linkedListCollection.modificationCount) {

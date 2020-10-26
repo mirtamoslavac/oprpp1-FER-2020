@@ -1,5 +1,8 @@
 package hr.fer.oprpp1.custom.collections;
 
+/**
+ * The {@code List} interface represents a simplified representation of a list collection.
+ */
 public interface List extends Collection {
     Object get(int index);
 

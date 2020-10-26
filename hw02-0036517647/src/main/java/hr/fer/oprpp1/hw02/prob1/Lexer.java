@@ -115,11 +115,11 @@ public class Lexer {
     }
 
     /**
-     * Determines whether the given {@code index} is over the boundaries of the {@code data} array and
+     * Determines whether the given {@code index} is over the upper boundary of the {@code data} array and
      * is a part of the decision whether the tokenization of an EOF token is to be performed.
      *
      * @param index int that is to be checked.
-     * @return {@code true} if the given {@code character}, {@code false} otherwise.
+     * @return {@code true} if the given {@code index} is over the upper boundary, {@code false} otherwise.
      */
     private boolean isEOF(int index) {
         if (index >= this.data.length) {
