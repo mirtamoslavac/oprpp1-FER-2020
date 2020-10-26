@@ -1,7 +1,7 @@
 package hr.fer.oprpp1.custom.scripting.lexer;
 
 /**
- * The {@code SmartScriptLexer} class represents a program performing lexical analysis.
+ * The {@code SmartScriptLexer} class represents a program performing lexical analysis for a defined language.
  *
  * @author mirtamoslavac
  * @version 1.0
@@ -37,8 +37,6 @@ public class SmartScriptLexer {
      */
     private static final String TAG_END = "$}";
 
-    private boolean checkedTagName;
-
 
     /**
      * Creates a new {@code SmartScriptLexer} instance for the given input text.
@@ -48,11 +46,11 @@ public class SmartScriptLexer {
      */
     public SmartScriptLexer(String text) {
         if (text == null) throw new NullPointerException("The input text cannot be null");
+
         this.data = text.toCharArray();
         this.currentIndex = 0;
         this.token = null;
         this.state = SmartScriptLexerState.TEXT;
-        this.checkedTagName = false;
     }
 
     /**
@@ -63,6 +61,7 @@ public class SmartScriptLexer {
      */
     public void setState(SmartScriptLexerState state) {
         if (state == null) throw new NullPointerException("The lexer state cannot be null");
+
         this.state = state;
     }
 
@@ -74,6 +73,7 @@ public class SmartScriptLexer {
      */
     public SmartScriptToken getToken() {
         if (this.token == null) throw new SmartScriptLexerException("Cannot get last token when nothing has been tokenized yet!");
+
         return this.token;
     }
 
@@ -87,8 +87,6 @@ public class SmartScriptLexer {
         if (this.token != null && this.token.getType() == SmartScriptTokenType.EOF) throw new SmartScriptLexerException("Cannot tokenize after reading EOF!");
 
         if (this.isEOF(this.currentIndex)) return this.token;
-//        this.skipWhitespace();
-//        if (this.isEOF(this.currentIndex)) return this.token;
 
         switch (this.state) {
             case TEXT -> {
@@ -97,7 +95,6 @@ public class SmartScriptLexer {
             }
             case TAG -> {
                 this.skipWhitespace();
-                if (!this.checkedTagName) {this.checkedTagName = true; return this.tokenizeTagName();}
                 if (this.isTagEnd()) return this.tokenizeTagEnd();
                 else return this.tokenizeInsideTag();
             }
@@ -105,6 +102,12 @@ public class SmartScriptLexer {
         }
     }
 
+    /**
+     * Returns a newly created text string {@link SmartScriptToken} instance outside a tag.
+     *
+     * @throws SmartScriptLexerException when attempting to start a tag, but not finishing it.
+     * @return string {@link SmartScriptToken}.
+     */
     private SmartScriptToken tokenizeText() {
         StringBuilder sb = new StringBuilder();
 
@@ -122,6 +125,11 @@ public class SmartScriptLexer {
         return this.token;
     }
 
+    /**
+     * Creates a new start tag {@link SmartScriptToken} instance within a tag.
+     *
+     * @return start tag {@link SmartScriptToken}.
+     */
     private SmartScriptToken tokenizeTagStart() {
         this.currentIndex += 2;
 
@@ -129,25 +137,16 @@ public class SmartScriptLexer {
         return this.token;
     }
 
-    private SmartScriptToken tokenizeTagName() {
-        if (this.data[this.currentIndex] == '=')
-            this.token = new SmartScriptToken(SmartScriptTokenType.TAG_NAME, String.valueOf(this.data[this.currentIndex++]));
-        else {
-            StringBuilder sb = new StringBuilder();
-
-            while (Character.isLetter(this.data[this.currentIndex]))
-                sb.append(this.data[this.currentIndex++]);
-
-            this.token = new SmartScriptToken(SmartScriptTokenType.TAG_NAME, sb.toString().toUpperCase());
-        }
-
-        return this.token;
-    }
-
+    /**
+     * Returns a newly created {@link SmartScriptToken} instance within a tag.
+     *
+     * @throws SmartScriptLexerException when unable to recognize a defined token type.
+     * @return {@link SmartScriptToken} instance.
+     */
     private SmartScriptToken tokenizeInsideTag() {
         this.skipWhitespace();
 
-        if (Character.isLetter(this.data[this.currentIndex])) return this.tokenizeVariable();
+        if (Character.isLetter(this.data[this.currentIndex]) || this.data[this.currentIndex] == '=') return this.tokenizeIdentifier();
 
         if (this.data[this.currentIndex] == '@' && this.currentIndex + 1 < this.data.length && Character.isLetter(this.data[this.currentIndex+1])) return this.tokenizeFunction();
 
@@ -157,19 +156,33 @@ public class SmartScriptLexer {
 
         if (this.data[this.currentIndex] == '"') return this.tokenizeString();
 
-        throw new SmartScriptLexerException("Cannot generate a token within the tag!");
+        throw new SmartScriptLexerException("Cannot generate a token within the tag because of the '" + this.data[this.currentIndex] + "' character!");
     }
 
+    /**
+     * Creates a new end tag {@link SmartScriptToken} instance within a tag.
+     *
+     * @return end tag {@link SmartScriptToken}.
+     */
     private SmartScriptToken tokenizeTagEnd() {
         this.currentIndex += 2;
-
-        this.checkedTagName = false;
 
         this.token = new SmartScriptToken(SmartScriptTokenType.TAG_END, TAG_END);
         return this.token;
     }
 
-    private SmartScriptToken tokenizeVariable() {
+    /**
+     * Creates a new identifier (tag name or variable) {@link SmartScriptToken} instance within a tag.
+     *
+     * @return identifier {@link SmartScriptToken}.
+     */
+    private SmartScriptToken tokenizeIdentifier() {
+
+        if(this.data[this.currentIndex] == '=') {
+            this.token = new SmartScriptToken(SmartScriptTokenType.IDENTIFIER, String.valueOf(this.data[this.currentIndex++]));
+            return this.token;
+        }
+
         StringBuilder sb = new StringBuilder();
 
         sb.append(this.data[this.currentIndex++]);
@@ -177,15 +190,20 @@ public class SmartScriptLexer {
         while (this.checkIfMoreValidVariableOrFunctionCharactersFollow())
             sb.append(this.data[this.currentIndex++]);
 
-        this.token = new SmartScriptToken(SmartScriptTokenType.VARIABLE, sb.toString());
+        this.token = new SmartScriptToken(SmartScriptTokenType.IDENTIFIER, sb.toString());
         return this.token;
     }
 
+    /**
+     * Creates a new function {@link SmartScriptToken} instance within a tag.
+     *
+     * @return function {@link SmartScriptToken}.
+     */
     private SmartScriptToken tokenizeFunction() {
-        this.currentIndex++;
 
         StringBuilder sb = new StringBuilder();
 
+        sb.append(this.data[this.currentIndex++]);
         sb.append(this.data[this.currentIndex++]);
 
         while (this.checkIfMoreValidVariableOrFunctionCharactersFollow())
@@ -195,12 +213,18 @@ public class SmartScriptLexer {
         return this.token;
     }
 
+    /**
+     * Creates a new number (integer or double) {@link SmartScriptToken} instance within a tag.
+     *
+     * @throws NumberFormatException when unable to parse string to integer or double.
+     * @return integer or double {@link SmartScriptToken}.
+     */
     private SmartScriptToken tokenizeNumber() {
         int dotCounter = 0;
 
         StringBuilder sb = new StringBuilder();
 
-        while (Character.isDigit(this.data[this.currentIndex])|| this.data[this.currentIndex] == '.' && dotCounter < 2) {
+        while (Character.isDigit(this.data[this.currentIndex])|| this.data[this.currentIndex] == '.' && dotCounter < 2 || this.data[this.currentIndex] == '-') {
             if (this.data[this.currentIndex] == '.') dotCounter++;
             sb.append(this.data[this.currentIndex++]);
         }
@@ -213,23 +237,33 @@ public class SmartScriptLexer {
             }
             return this.token;
         } catch (NumberFormatException e) {
-            throw new SmartScriptLexerException("The number trying to be tokenized cannot be parsed!");
+            throw new NumberFormatException("The number trying to be tokenized cannot be parsed!");
         }
     }
 
+    /**
+     * Creates a new operator {@link SmartScriptToken} instance within a tag.
+     *
+     * @return operator {@link SmartScriptToken}.
+     */
     private SmartScriptToken tokenizeOperator() {
         this.token = new SmartScriptToken(SmartScriptTokenType.OPERATOR, String.valueOf(this.data[this.currentIndex++]));
         return this.token;
     }
 
+    /**
+     * Creates a new string {@link SmartScriptToken} instance within a tag.
+     *
+     * @return string {@link SmartScriptToken}.
+     */
     private SmartScriptToken tokenizeString() {
-        //escape starting "
+        //ignore starting "
         this.currentIndex++;
 
         StringBuilder sb = new StringBuilder();
 
         while (this.currentIndex < this.data.length && this.data[this.currentIndex] != '"') {
-            this.checkWhitespaceChars(sb);
+            this.checkAndAddWhitespaceChars(sb);
             if (checkEscapingTag()) {
                 sb.append(this.data[++this.currentIndex]);
                 this.currentIndex++;
@@ -238,41 +272,60 @@ public class SmartScriptLexer {
             }
         }
 
-        //escape ending "
+        //ignore ending "
         this.currentIndex++;
 
         this.token = new SmartScriptToken(SmartScriptTokenType.STRING_TAG, sb.toString());
         return this.token;
     }
 
+    /**
+     * Checks whether a tag start is being defined.
+     *
+     * @return {@code true} if it is being defined, {@code false} otherwise.
+     */
     private boolean isTagStart() {
         return this.data[this.currentIndex] == TAG_START.charAt(0) && this.currentIndex + 1 < this.data.length && this.data[this.currentIndex+1] == TAG_START.charAt(1);
     }
 
+    /**
+     * Checks whether a tag ending is being defined.
+     *
+     * @return {@code true} if it is being defined, {@code false} otherwise.
+     */
     private boolean isTagEnd() {
         return this.data[this.currentIndex] == TAG_END.charAt(0) && this.currentIndex + 1 < this.data.length && this.data[this.currentIndex+1] == TAG_END.charAt(1);
     }
 
-    private void checkWhitespaceChars(StringBuilder sb) {
-        if (this.data[this.currentIndex] == '\\' && this.currentIndex + 1 < this.data.length) {
-            switch (this.data[this.currentIndex + 1]) {
-                case 'n' -> {
-                    this.currentIndex += 2;
-                    sb.append('\n');
-                }
-                case 'r' -> {
-                    this.currentIndex += 2;
-                    sb.append('\r');
-                }
-                case 't' -> {
-                    this.currentIndex += 2;
-                    sb.append('\t');
-                }
-                default -> {}
-            }
+    /**
+     * Looks for and adds, if found, whitespace characters defined through a char sequence within a string in a tag.
+     */
+    private void checkAndAddWhitespaceChars(StringBuilder sb) {
+       whileLoop: while (this.data[this.currentIndex] == '\\' && this.currentIndex + 1 < this.data.length) {
+           switch (this.data[this.currentIndex + 1]) {
+               case 'n' -> {
+                   this.currentIndex += 2;
+                   sb.append('\n');
+               }
+               case 'r' -> {
+                   this.currentIndex += 2;
+                   sb.append('\r');
+               }
+               case 't' -> {
+                   this.currentIndex += 2;
+                   sb.append('\t');
+               }
+               default -> {break whileLoop;}
+           }
         }
     }
 
+    /**
+     * Determines whether a valid attempt of escaping a character is happening outside the tag.
+     *
+     * @throws SmartScriptLexerException when trying to escape a invalid character.
+     * @return {@code true} if the escaping is valid, {@code false} otherwise.
+     */
     private boolean checkEscapingText() {
         if (this.data[this.currentIndex] == '\\') {
             if (!checkEscapedText()) {
@@ -282,11 +335,21 @@ public class SmartScriptLexer {
         }
         return false;
     }
-
+    /**
+     * Determines whether the character attempted to be escaped outside the tag is allowed to be escaped by the language definition.
+     *
+     * @return {@code true} if the character is allowed to be escaped, {@code false} otherwise.
+     */
     private boolean checkEscapedText() {
         return this.currentIndex + 1 < this.data.length && (this.data[this.currentIndex+1] == '\\' || this.data[this.currentIndex+1] == '{');
     }
 
+    /**
+     * Determines whether a valid attempt of escaping a character is happening within the tag.
+     *
+     * @throws SmartScriptLexerException when trying to escape a invalid character.
+     * @return {@code true} if the escaping is valid, {@code false} otherwise.
+     */
     private boolean checkEscapingTag() {
         if (this.data[this.currentIndex] == '\\') {
             if (!checkEscapedTag()) {
@@ -297,22 +360,50 @@ public class SmartScriptLexer {
         return false;
     }
 
+    /**
+     * Determines whether the character attempted to be escaped within the tag is allowed to be escaped by the language definition.
+     *
+     * @return {@code true} if the character is allowed to be escaped, {@code false} otherwise.
+     */
     private boolean checkEscapedTag() {
-        return this.currentIndex + 1 < this.data.length && (this.data[this.currentIndex+1] == '\\' || this.data[this.currentIndex+1] == '"');
+        return this.currentIndex + 1 < this.data.length && (this.data[this.currentIndex+1] == '\\' || this.data[this.currentIndex+1] == '\"');
     }
 
+    /**
+     * Determines whether the following character is valid in the given context, defined by the language.
+     *
+     * @return {@code true} if the following character is valid in the given context, {@code false} otherwise.
+     */
     private boolean checkIfMoreValidVariableOrFunctionCharactersFollow() {
         return Character.isLetter(this.data[this.currentIndex]) || Character.isDigit(this.data[this.currentIndex]) || this.data[this.currentIndex] == '_';
     }
 
+    /**
+     * Determines whether a number follows the current character{@code -} and therefore is a part of the number.
+     *
+     * @return {@code true} if a number follows, {@code false} otherwise.
+     */
     private boolean checkIfNegativeNumber() {
         return this.currentIndex + 1 < this.data.length && Character.isDigit(this.data[this.currentIndex+1]);
     }
 
+    /**
+     * Determines whether the given {@code charater} is a valid operator defined by the language.
+     *
+     * @param character char that is to be checked.
+     * @return {@code true} if the given {@code character} is a valid operator, {@code false} otherwise.
+     */
     private boolean checkIfValidOperator(char character){
         return character == '+' || character == '-' || character == '*' || character == '/' || character == '^';
     }
 
+    /**
+     * Determines whether the given {@code index} is over the upper boundary of the {@code data} array and
+     * is a part of the decision whether the tokenization of an EOF token is to be performed.
+     *
+     * @param index int that is to be checked.
+     * @return {@code true} if the given {@code index} is over the upper boundary, {@code false} otherwise.
+     */
     private boolean isEOF(int index) {
         if (index >= this.data.length) {
             this.token = new SmartScriptToken(SmartScriptTokenType.EOF, null);
@@ -321,12 +412,21 @@ public class SmartScriptLexer {
         return false;
     }
 
+    /**
+     * Skips all whitespace characters in the {@code data} array until encountering a non-whitespace character;
+     */
     private void skipWhitespace() {
         for (int i = this.currentIndex, dataLength = this.data.length; i < dataLength; i++, this.currentIndex++) {
             if (this.currentIndex == this.data.length || !this.isWhitespace(this.data[this.currentIndex])) break;
         }
     }
 
+    /**
+     * Determines whether the given {@code character} is a whitespace character.
+     *
+     * @param character char that is to be checked.
+     * @return {@code true} if the given {@code character} is a whitespace character, {@code false} otherwise.
+     */
     private boolean isWhitespace(char character) {
         return character == ' ' || character == '\r' || character == '\n' || character == '\t';
     }

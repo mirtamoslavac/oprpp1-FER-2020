@@ -11,6 +11,12 @@ import hr.fer.oprpp1.custom.scripting.nodes.*;
 
 import java.util.Arrays;
 
+/**
+ * The {@code SmartScriptParser} class represents an implementation of a parser.
+ *
+ * @author mirtamoslavac
+ * @version 1.0
+ */
 public class SmartScriptParser {
 
     /**
@@ -58,12 +64,13 @@ public class SmartScriptParser {
 
     private DocumentNode parseDocumentBody() {
         this.stack.push(new DocumentNode());
+
         SmartScriptToken currentToken = this.lexer.nextToken();
         while (currentToken.getType() != SmartScriptTokenType.EOF) {
             switch (currentToken.getType()) {
                 case STRING_TEXT -> ((Node)this.stack.peek()).addChildNode(new TextNode((String)currentToken.getValue()));
                 case TAG_START -> this.lexer.setState(SmartScriptLexerState.TAG);
-                case TAG_NAME -> this.parseTag(currentToken);
+                case IDENTIFIER -> this.parseTag(currentToken);
                 default -> throw new SmartScriptParserException("Invalid token type!");
             }
 
@@ -108,7 +115,7 @@ public class SmartScriptParser {
             elements.add(
                     switch (currentToken.getType()) {
                         case EOF -> throw new SmartScriptParserException("The =-tag was not closed with a specified tag ending!");
-                        case VARIABLE -> new ElementVariable((String)currentToken.getValue());
+                        case IDENTIFIER -> new ElementVariable((String)currentToken.getValue());
                         case INTEGER -> new ElementConstantInteger((int)currentToken.getValue());
                         case DOUBLE -> new ElementConstantDouble((double)currentToken.getValue());
                         case STRING_TAG -> new ElementString((String)currentToken.getValue());
@@ -119,8 +126,6 @@ public class SmartScriptParser {
 
             currentToken = this.lexer.nextToken();
         }
-
-        if (elements.size() == 0) throw new SmartScriptParserException("The =-tag cannot be empty!");
 
         return new EchoNode(Arrays.copyOf(elements.toArray(), elements.size(), Element[].class));
 
@@ -134,7 +139,7 @@ public class SmartScriptParser {
             elements.add(
                     switch (currentToken.getType()) {
                         case EOF -> throw new SmartScriptParserException("The FOR tag was not closed with a specified tag ending!");
-                        case VARIABLE -> new ElementVariable((String)currentToken.getValue());
+                        case IDENTIFIER -> new ElementVariable((String)currentToken.getValue());
                         case INTEGER -> new ElementConstantInteger((int)currentToken.getValue());
                         case DOUBLE -> new ElementConstantDouble((double)currentToken.getValue());
                         case STRING_TAG -> new ElementString((String)currentToken.getValue());
