@@ -226,7 +226,7 @@ public class Prob1Test {
 	@Test
 	public void testNotNullInExtended() {
 		Lexer lexer = new Lexer("");
-//		lexer.setState(LexerState.EXTENDED);
+		lexer.setState(LexerState.EXTENDED);
 
 		assertNotNull(lexer.nextToken(), "Token was expected but null was returned.");
 	}
@@ -234,7 +234,7 @@ public class Prob1Test {
 	@Test
 	public void testEmptyInExtended() {
 		Lexer lexer = new Lexer("");
-//		lexer.setState(LexerState.EXTENDED);
+		lexer.setState(LexerState.EXTENDED);
 
 		assertEquals(TokenType.EOF, lexer.nextToken().getType(), "Empty input must generate only EOF token.");
 	}
@@ -243,7 +243,7 @@ public class Prob1Test {
 	public void testGetReturnsLastNextInExtended() {
 		// Calling getToken once or several times after calling nextToken must return each time what nextToken returned...
 		Lexer lexer = new Lexer("");
-//		lexer.setState(LexerState.EXTENDED);
+		lexer.setState(LexerState.EXTENDED);
 
 		Token token = lexer.nextToken();
 		assertEquals(token, lexer.getToken(), "getToken returned different token than nextToken.");
@@ -253,7 +253,7 @@ public class Prob1Test {
 	@Test
 	public void testRadAfterEOFInExtended() {
 		Lexer lexer = new Lexer("");
-//		lexer.setState(LexerState.EXTENDED);
+		lexer.setState(LexerState.EXTENDED);
 
 		// will obtain EOF
 		lexer.nextToken();
@@ -265,7 +265,7 @@ public class Prob1Test {
 	public void testNoActualContentInExtended() {
 		// When input is only of spaces, tabs, newlines, etc...
 		Lexer lexer = new Lexer("   \r\n\t    ");
-//		lexer.setState(LexerState.EXTENDED);
+		lexer.setState(LexerState.EXTENDED);
 
 		assertEquals(TokenType.EOF, lexer.nextToken().getType(), "Input had no content. Lexer should generated only EOF token.");
 	}
