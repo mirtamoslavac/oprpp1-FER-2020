@@ -7,12 +7,12 @@ import hr.fer.oprpp1.custom.collections.Processor;
 import java.util.Arrays;
 
 /**
- * {@code ArrayListDemo} is a command-line application that demonstrates certain {@link ArrayIndexedCollection} functions.
+ * {@code ArrayListDemo} is a command-line application that demonstrates certain {@link ArrayIndexedCollection} functionalities.
  */
 public class ArrayListDemo {
 
     /**
-     * Method taken from this homework's PDF dedicated to demonstrating certain {@link ArrayIndexedCollection} functions.
+     * Method taken from this homework's PDF dedicated to demonstrating certain {@link ArrayIndexedCollection} functionalities.
      * @param args an array of command-line arguments.
      */
     public static void main(String[] args) {

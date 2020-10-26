@@ -2,19 +2,28 @@ package hr.fer.oprpp1.custom.collections.demo;
 
 import hr.fer.oprpp1.custom.collections.*;
 
-import java.util.NoSuchElementException;
-
 /**
- * {@code ElementsGetterDemo} is a command-line application that demonstrates certain {@link ElementsGetter} functions.
+ * {@code ElementsGetterDemo} is a command-line application that demonstrates certain {@link ElementsGetter} functionalities.
  */
 public class ElementsGetterDemo {
 
     /**
-     * Method taken from this homework's PDF dedicated to demonstrating certain {@link ElementsGetter} functions.
+     * Examples taken from this homework's PDF dedicated to demonstrating certain {@link ElementsGetter} functionalities.
      * @param args an array of command-line arguments.
      */
     public static void main(String[] args) {
-        System.out.println("DEMO 1\n-----------------");
+        test1();
+        test2();
+        test3();
+        test4();
+        test5();
+        test6();
+        test7();
+        test8();
+        test9();
+    }
+
+    private static void test1() {
         Collection col = new ArrayIndexedCollection();
         col.add("Ivo");
         col.add("Ana");
@@ -22,25 +31,26 @@ public class ElementsGetterDemo {
 
         ElementsGetter getter = col.createElementsGetter();
 
-            System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
-            System.out.println("Jedan element: " + getter.getNextElement());
+        System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
+        System.out.println("Jedan element: " + getter.getNextElement());
 
-            System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
-            System.out.println("Jedan element: " + getter.getNextElement());
+        System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
+        System.out.println("Jedan element: " + getter.getNextElement());
 
-            System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
-            System.out.println("Jedan element: " + getter.getNextElement());
+        System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
+        System.out.println("Jedan element: " + getter.getNextElement());
 
-            System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
-            //System.out.println("Jedan element: " + getter.getNextElement()); //uncomment for exception
+        System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
+        //System.out.println("Jedan element: " + getter.getNextElement()); //uncomment for exception
+    }
 
-        System.out.println("\n\nDEMO 2\n-----------------");
-        col = new LinkedListIndexedCollection();
+    private static void test2() {
+        Collection col = new LinkedListIndexedCollection();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        getter = col.createElementsGetter();
+        ElementsGetter getter = col.createElementsGetter();
 
         System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
         System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
@@ -60,22 +70,24 @@ public class ElementsGetterDemo {
 
         System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
         System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
+    }
 
-        System.out.println("\n\nDEMO 3\n-----------------");
-        col = new LinkedListIndexedCollection();
+    private static void test3() {
+        Collection col = new LinkedListIndexedCollection();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        getter = col.createElementsGetter();
+        ElementsGetter getter = col.createElementsGetter();
 
         System.out.println("Jedan element: " + getter.getNextElement());
         System.out.println("Jedan element: " + getter.getNextElement());
         System.out.println("Jedan element: " + getter.getNextElement());
         //System.out.println("Jedan element: " + getter.getNextElement()); //uncomment for exception
+    }
 
-        System.out.println("\n\nDEMO 4\n-----------------");
-        col = new LinkedListIndexedCollection();
+    private static void test4() {
+        Collection col = new LinkedListIndexedCollection();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
@@ -88,8 +100,9 @@ public class ElementsGetterDemo {
         System.out.println("Jedan element: " + getter2.getNextElement());
         System.out.println("Jedan element: " + getter1.getNextElement());
         System.out.println("Jedan element: " + getter2.getNextElement());
+    }
 
-        System.out.println("\n\nDEMO 5\n-----------------");
+    private static void test5() {
         Collection col1 = new ArrayIndexedCollection();
         Collection col2 = new ArrayIndexedCollection();
         col1.add("Ivo");
@@ -99,8 +112,8 @@ public class ElementsGetterDemo {
         col2.add("Štefanija");
         col2.add("Karmela");
 
-        getter1 = col1.createElementsGetter();
-        getter2 = col1.createElementsGetter();
+        ElementsGetter getter1 = col1.createElementsGetter();
+        ElementsGetter getter2 = col1.createElementsGetter();
         ElementsGetter getter3 = col2.createElementsGetter();
 
         System.out.println("Jedan element: " + getter1.getNextElement());
@@ -108,34 +121,37 @@ public class ElementsGetterDemo {
         System.out.println("Jedan element: " + getter2.getNextElement());
         System.out.println("Jedan element: " + getter3.getNextElement());
         System.out.println("Jedan element: " + getter3.getNextElement());
+    }
 
-        System.out.println("\n\nDEMO 6\n-----------------");
-        col = new ArrayIndexedCollection();
+    private static void test6() {
+        Collection col = new ArrayIndexedCollection();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        getter = col.createElementsGetter();
+        ElementsGetter getter = col.createElementsGetter();
 
         System.out.println("Jedan element: " + getter.getNextElement());
         System.out.println("Jedan element: " + getter.getNextElement());
         col.clear();
         //System.out.println("Jedan element: " + getter.getNextElement()); //uncomment for exception
+    }
 
-        System.out.println("\n\nDEMO 7\n-----------------");
-        col = new ArrayIndexedCollection();
+    private static void test7() {
+        Collection col = new ArrayIndexedCollection();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        getter = col.createElementsGetter();
+        ElementsGetter getter = col.createElementsGetter();
         getter.getNextElement();
 
         getter.processRemaining(System.out::println);
+    }
 
-        System.out.println("\n\nDEMO 8\n-----------------");
-        col1 = new LinkedListIndexedCollection();
-        col2 = new ArrayIndexedCollection();
+    private static void test8() {
+        Collection col1 = new LinkedListIndexedCollection();
+        Collection col2 = new ArrayIndexedCollection();
         col1.add(2);
         col1.add(3);
         col1.add(4);
@@ -146,8 +162,9 @@ public class ElementsGetterDemo {
         col2.addAllSatisfying(col1, new EvenIntegerTester());
 
         col2.forEach(System.out::println);
+    }
 
-        System.out.println("\n\nDEMO 9\n-----------------");
+    private static void test9() {
         List col1list = new ArrayIndexedCollection();
         List col2list = new LinkedListIndexedCollection();
         col1list.add("Ivana");

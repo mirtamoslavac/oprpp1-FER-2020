@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tester class with examples taken from this homework's PDF dedicated to demonstrating certain {@link ElementsGetter} functions.
+ * Tester class with examples taken from this homework's PDF dedicated to demonstrating certain {@link ElementsGetter} functionalities.
  */
 public class ElementsGetterTest {
 

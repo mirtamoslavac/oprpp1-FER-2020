@@ -1,5 +1,5 @@
 /**
- * Package used to demonstrate certain functions of certain custom collection implementations.
+ * Package used to demonstrate certain functionalities of certain custom collection implementations.
  *
  * @since 1.0
  */
