@@ -37,7 +37,7 @@ public class ElementFunction extends Element {
 
     @Override
     public String asText() {
-        return "@" + this.name;
+        return this.name;
     }
 
     @Override
