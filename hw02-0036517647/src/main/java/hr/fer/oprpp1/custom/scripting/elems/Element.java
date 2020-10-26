@@ -1,12 +1,12 @@
 package hr.fer.oprpp1.custom.scripting.elems;
 
 /**
- * The {@code Element} class is used as a base class for representing expressions.
+ * The {@code Element} abstract class is used as a base class for representing expressions.
  *
  * @author mirtamoslavac
  * @version 1.0
  */
-public class Element {
+public abstract class Element {
 
     /**
      * Provides the current {@code Element} instance in the form of a string.

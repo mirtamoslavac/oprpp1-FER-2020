@@ -5,12 +5,12 @@ import hr.fer.oprpp1.custom.collections.ArrayIndexedCollection;
 import java.util.Objects;
 
 /**
- * The {@code Node} class is used as a base class for representing graph nodes/structured documents.
+ * The {@code Node} abstract class is used as a base class for representing graph nodes/structured documents.
  *
  * @author mirtamoslavac
  * @version 1.0
  */
-public class Node {
+public abstract class Node {
 
     /**
      * Collection of all children of the current instance.
@@ -18,7 +18,7 @@ public class Node {
     private ArrayIndexedCollection children;
 
     /**
-     *
+     * Creates a new {@code Node} instance.
      */
     public Node() {
         this.children = null;
