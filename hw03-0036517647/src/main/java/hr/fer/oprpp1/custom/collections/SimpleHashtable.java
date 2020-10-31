@@ -1,5 +1,6 @@
 package hr.fer.oprpp1.custom.collections;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import static java.lang.Math.abs;
@@ -136,6 +137,8 @@ public class SimpleHashtable<K,V> {
     public V put(K key, V value) {
         if (key == null) throw new NullPointerException("The given key cannot be null!");
 
+        this.checkOccupancy();
+
         int slot = getSlot(key);
 
         if (this.containsKey(key)) {
@@ -220,6 +223,7 @@ public class SimpleHashtable<K,V> {
                 if (hashtableElement.key.equals(key)) {
                     value = hashtableElement.value;
                     previous.next = hashtableElement.next;
+                    this.size--;
                     break;
                 }
             }
@@ -275,6 +279,11 @@ public class SimpleHashtable<K,V> {
         return array;
     }
 
+    public void clear() {
+        Arrays.fill(this.hashtable, null);
+        this.size = 0;
+    }
+
     private int getSlot(Object key) {
         return abs(key.hashCode()) % this.hashtable.length;
     }
@@ -290,4 +299,18 @@ public class SimpleHashtable<K,V> {
 
     }
 
+    @SuppressWarnings("unchecked")
+    private void checkOccupancy() {
+        if (this.size / (1. * this.hashtable.length) < DEFAULT_OVERCAPACITY_FACTOR) return;
+
+        TableEntry<K, V>[] oldTable = this.hashtable;
+        this.hashtable = new TableEntry[this.hashtable.length * RESIZING_FACTOR];
+
+        for (TableEntry<K, V> hashtableElement : oldTable) {
+            while (hashtableElement != null) {
+                this.hashtable[getSlot(hashtableElement.key)] = hashtableElement;
+                hashtableElement = hashtableElement.next;
+            }
+        }
+    }
 }
