@@ -84,8 +84,10 @@ public class Vector2D {
      * @param angle the amount by which the current 2D vector is to be rotated.
      */
     public void rotate(double angle) {
-        this.x = this.x * cos(angle) - this.y * sin(angle);
-        this.y = this.x * sin(angle) + this.y * cos(angle);
+        double oldX = this.x;
+        double oldY = this.y;
+        this.x = oldX * cos(angle) - oldY * sin(angle);
+        this.y = oldX * sin(angle) + oldY * cos(angle);
     }
 
     /**

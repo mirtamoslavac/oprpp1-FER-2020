@@ -97,7 +97,7 @@ public class Dictionary<K,V> {
     }
 
     /**
-     * Inserts the given key and value as a {@link DictionaryEntry} in the current dictionary.
+     * Inserts the given key and value as a {@link DictionaryEntry} instance in the current dictionary.
      * If an entry with the same {@code key} that is given already exists, then the old {@code value} will be overwritten by the new one.
      *
      * @param key the key of the new {@code DictionaryEntry} instance.
@@ -108,11 +108,14 @@ public class Dictionary<K,V> {
     public V put(K key, V value) {
         if (key == null) throw new NullPointerException("The given key cannot be null!");
 
+        V oldValue = this.get(key);
+        int index = this.dictionaryEntries.indexOf(new DictionaryEntry<>(key, oldValue));
         try {
-            V oldValue = this.get(key);
-            this.dictionaryEntries.insert(new DictionaryEntry<>(key, value), this.dictionaryEntries.indexOf(new DictionaryEntry<>(key, oldValue)));
+            this.dictionaryEntries.remove(this.dictionaryEntries.indexOf(new DictionaryEntry<>(key, oldValue)));
+            this.dictionaryEntries.insert(new DictionaryEntry<>(key, value), index);
             return oldValue;
         } catch (IndexOutOfBoundsException ex) {
+            this.dictionaryEntries.insert(new DictionaryEntry<>(key, value), this.size());
             return null;
         }
     }
@@ -127,11 +130,18 @@ public class Dictionary<K,V> {
     public V get(Object key) {
         if (key == null) throw new NullPointerException("The given key cannot be null!");
 
-        try {
-            return this.dictionaryEntries.get(this.dictionaryEntries.indexOf(key)).value;
-        } catch (IndexOutOfBoundsException ex) {
-            return null;
+        V value = null;
+
+        ElementsGetter<DictionaryEntry<K,V>> entryGetter = dictionaryEntries.createElementsGetter();
+        while(entryGetter.hasNextElement()) {
+            DictionaryEntry<K,V> nextEntry = entryGetter.getNextElement();
+            if (nextEntry.key == key) {
+                value = nextEntry.value;
+                break;
+            }
         }
+
+        return value;
     }
 
     /**
