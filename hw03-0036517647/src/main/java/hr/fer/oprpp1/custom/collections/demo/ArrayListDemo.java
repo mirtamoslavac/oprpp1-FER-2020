@@ -16,7 +16,7 @@ public class ArrayListDemo {
      * @param args an array of command-line arguments.
      */
     public static void main(String[] args) {
-        ArrayIndexedCollection col = new ArrayIndexedCollection(2);
+        ArrayIndexedCollection<Object> col = new ArrayIndexedCollection<>(2);
         col.add(20);
         col.add("New York");
         col.add("San Francisco"); // here the internal array is reallocated to 4
@@ -25,9 +25,9 @@ public class ArrayListDemo {
         System.out.println(col.get(1)); // writes: "San Francisco"
         System.out.println(col.size()); // writes: 2
         col.add("Los Angeles");
-        LinkedListIndexedCollection col2 = new LinkedListIndexedCollection(col);
+        LinkedListIndexedCollection<Object> col2 = new LinkedListIndexedCollection<>(col);
 // This is local class representing a Processor which writes objects to System.out
-        class P implements Processor {
+        class P implements Processor<Object> {
             public void process(Object o) {
                 System.out.println(o);
             }

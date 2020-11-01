@@ -5,7 +5,7 @@ import hr.fer.oprpp1.custom.collections.Tester;
 /**
  * {@code EvenIntegerTester} is an implementation of {@link Tester} used to demonstrate its capability.
  */
-public class EvenIntegerTester implements Tester {
+public class EvenIntegerTester implements Tester<Object> {
 
     /**
      * {@inheritDoc}

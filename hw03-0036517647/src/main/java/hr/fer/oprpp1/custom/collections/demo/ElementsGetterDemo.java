@@ -24,12 +24,12 @@ public class ElementsGetterDemo {
     }
 
     private static void test1() {
-        Collection col = new ArrayIndexedCollection();
+        Collection<String> col = new ArrayIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<String> getter = col.createElementsGetter();
 
         System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
         System.out.println("Jedan element: " + getter.getNextElement());
@@ -45,12 +45,12 @@ public class ElementsGetterDemo {
     }
 
     private static void test2() {
-        Collection col = new LinkedListIndexedCollection();
+        Collection<String> col = new LinkedListIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<String> getter = col.createElementsGetter();
 
         System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
         System.out.println("Ima nepredanih elemenata: " + getter.hasNextElement());
@@ -73,12 +73,12 @@ public class ElementsGetterDemo {
     }
 
     private static void test3() {
-        Collection col = new LinkedListIndexedCollection();
+        Collection<String> col = new LinkedListIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<String> getter = col.createElementsGetter();
 
         System.out.println("Jedan element: " + getter.getNextElement());
         System.out.println("Jedan element: " + getter.getNextElement());
@@ -87,13 +87,13 @@ public class ElementsGetterDemo {
     }
 
     private static void test4() {
-        Collection col = new LinkedListIndexedCollection();
+        Collection<String> col = new LinkedListIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter1 = col.createElementsGetter();
-        ElementsGetter getter2 = col.createElementsGetter();
+        ElementsGetter<String> getter1 = col.createElementsGetter();
+        ElementsGetter<String> getter2 = col.createElementsGetter();
 
         System.out.println("Jedan element: " + getter1.getNextElement());
         System.out.println("Jedan element: " + getter1.getNextElement());
@@ -103,8 +103,8 @@ public class ElementsGetterDemo {
     }
 
     private static void test5() {
-        Collection col1 = new ArrayIndexedCollection();
-        Collection col2 = new ArrayIndexedCollection();
+        Collection<String> col1 = new ArrayIndexedCollection<>();
+        Collection<String> col2 = new ArrayIndexedCollection<>();
         col1.add("Ivo");
         col1.add("Ana");
         col1.add("Jasna");
@@ -112,9 +112,9 @@ public class ElementsGetterDemo {
         col2.add("Štefanija");
         col2.add("Karmela");
 
-        ElementsGetter getter1 = col1.createElementsGetter();
-        ElementsGetter getter2 = col1.createElementsGetter();
-        ElementsGetter getter3 = col2.createElementsGetter();
+        ElementsGetter<String> getter1 = col1.createElementsGetter();
+        ElementsGetter<String> getter2 = col1.createElementsGetter();
+        ElementsGetter<String> getter3 = col2.createElementsGetter();
 
         System.out.println("Jedan element: " + getter1.getNextElement());
         System.out.println("Jedan element: " + getter1.getNextElement());
@@ -124,12 +124,12 @@ public class ElementsGetterDemo {
     }
 
     private static void test6() {
-        Collection col = new ArrayIndexedCollection();
+        Collection<String> col = new ArrayIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<String> getter = col.createElementsGetter();
 
         System.out.println("Jedan element: " + getter.getNextElement());
         System.out.println("Jedan element: " + getter.getNextElement());
@@ -138,20 +138,20 @@ public class ElementsGetterDemo {
     }
 
     private static void test7() {
-        Collection col = new ArrayIndexedCollection();
+        Collection<String> col = new ArrayIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<String> getter = col.createElementsGetter();
         getter.getNextElement();
 
         getter.processRemaining(System.out::println);
     }
 
     private static void test8() {
-        Collection col1 = new LinkedListIndexedCollection();
-        Collection col2 = new ArrayIndexedCollection();
+        Collection<Integer> col1 = new LinkedListIndexedCollection<>();
+        Collection<Integer> col2 = new ArrayIndexedCollection<>();
         col1.add(2);
         col1.add(3);
         col1.add(4);
@@ -165,12 +165,12 @@ public class ElementsGetterDemo {
     }
 
     private static void test9() {
-        List col1list = new ArrayIndexedCollection();
-        List col2list = new LinkedListIndexedCollection();
+        List<String> col1list = new ArrayIndexedCollection<>();
+        List<String> col2list = new LinkedListIndexedCollection<>();
         col1list.add("Ivana");
         col2list.add("Jasna");
-        Collection col3 = col1list;
-        Collection col4 = col2list;
+        Collection<String> col3 = col1list;
+        Collection<String> col4 = col2list;
         col1list.get(0);
         col2list.get(0);
         //col3.get(0); // neće se prevesti! Razumijete li zašto?
