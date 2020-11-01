@@ -16,10 +16,10 @@ public class Dictionary<K,V> {
     /**
      * The Adaptee in the adapter pattern, in this case an {@link ArrayIndexedCollection}, in which the key-value pairs will be stored.
      */
-    private ArrayIndexedCollection<DictionaryEntry<K,V>> dictionaryEntries;
+    private final ArrayIndexedCollection<DictionaryEntry<K, V>> dictionaryEntries;
 
     /**
-     *  Default constructor that creates a new instance of both the adaptor ({@code Dictionary}) and the adaptee ({@link ArrayIndexedCollection}).
+     * Default constructor that creates a new instance of both the adaptor ({@code Dictionary}) and the adaptee ({@link ArrayIndexedCollection}).
      */
     public Dictionary() {
         this.dictionaryEntries = new ArrayIndexedCollection<>();
@@ -31,7 +31,7 @@ public class Dictionary<K,V> {
      * @param <K> type of the key object in the dictionary entry.
      * @param <V> type of the value object in the dictionary entry.
      */
-    private static class DictionaryEntry<K,V> {
+    private static class DictionaryEntry<K, V> {
         /**
          * The key to the the current entry.
          */
@@ -45,7 +45,7 @@ public class Dictionary<K,V> {
         /**
          * Creates a new {@code DictionaryEntry} with the given {@code key} and {@code value}.
          *
-         * @param key the key to the new entry.
+         * @param key   the key to the new entry.
          * @param value the value of the new entry.
          * @throws NullPointerException when the given {@code key} is {@code null}.
          */
@@ -102,54 +102,44 @@ public class Dictionary<K,V> {
      *
      * @param key the key of the new {@code DictionaryEntry} instance.
      * @param value the value of the new {@code DictionaryEntry} instance.
-     * @throws NullPointerException when the given {@code key} is {@code null}.
      * @return old {@code value} if an entry with the same {@code key} already existed, {@code null} otherwise.
+     * @throws NullPointerException when the given {@code key} is {@code null}.
      */
     public V put(K key, V value) {
         if (key == null) throw new NullPointerException("The given key cannot be null!");
 
-        V oldValue = this.get(key);
-        int index = this.dictionaryEntries.indexOf(new DictionaryEntry<>(key, oldValue));
-        try {
-            this.dictionaryEntries.remove(this.dictionaryEntries.indexOf(new DictionaryEntry<>(key, oldValue)));
-            this.dictionaryEntries.insert(new DictionaryEntry<>(key, value), index);
-            return oldValue;
-        } catch (IndexOutOfBoundsException ex) {
+        DictionaryEntry<K, V> entry = this.getEntry(key);
+        if (entry == null) {
             this.dictionaryEntries.insert(new DictionaryEntry<>(key, value), this.size());
             return null;
         }
+
+        V oldValue = entry.value;
+        entry.value = value;
+        return oldValue;
     }
 
     /**
      * Retrieves the entry in the current dictionary that has the same key as the given {@code key}.
      *
      * @param key the key of the wanted {@code DictionaryEntry} instance.
-     * @throws NullPointerException when the given {@code key} is {@code null}.
      * @return {@code value} if the matched entry contains a non-{@code null} value, {@code null} otherwise.
+     * @throws NullPointerException when the given {@code key} is {@code null}.
      */
     public V get(Object key) {
         if (key == null) throw new NullPointerException("The given key cannot be null!");
 
-        V value = null;
-
-        ElementsGetter<DictionaryEntry<K,V>> entryGetter = dictionaryEntries.createElementsGetter();
-        while(entryGetter.hasNextElement()) {
-            DictionaryEntry<K,V> nextEntry = entryGetter.getNextElement();
-            if (nextEntry.key == key) {
-                value = nextEntry.value;
-                break;
-            }
-        }
-
-        return value;
+        DictionaryEntry<K, V> entry = this.getEntry(key);
+        if (entry == null) return null;
+        return entry.value;
     }
 
     /**
      * Removes the entry from the current dictionary that has the same key as the given {@code key}.
      *
      * @param key the key of the wanted {@code DictionaryEntry} instance.
-     * @throws NullPointerException when the given {@code key} is {@code null}.
      * @return {@code value} if the matched and removed entry contains a non-{@code null} value, {@code null} otherwise.
+     * @throws NullPointerException when the given {@code key} is {@code null}.
      */
     public V remove(K key) {
         if (key == null) throw new NullPointerException("The given key cannot be null!");
@@ -172,5 +162,23 @@ public class Dictionary<K,V> {
     @Override
     public int hashCode() {
         return Objects.hash(this.dictionaryEntries);
+    }
+
+    /**
+     * Fetches the {@link DictionaryEntry} instance whose {@code key} equals to the given {@code key}.
+     *
+     * @param key {@code key} of the wanted entry.
+     * @return the entry requested if found, {@code null} otherwise.
+     */
+    private DictionaryEntry<K, V> getEntry(Object key) {
+        ElementsGetter<DictionaryEntry<K, V>> elementsGetter = this.dictionaryEntries.createElementsGetter();
+
+        while (elementsGetter.hasNextElement()) {
+            DictionaryEntry<K, V> possibleDictionaryEntry = elementsGetter.getNextElement();
+            if (possibleDictionaryEntry.key.equals(key))
+                return possibleDictionaryEntry;
+        }
+
+        return null;
     }
 }

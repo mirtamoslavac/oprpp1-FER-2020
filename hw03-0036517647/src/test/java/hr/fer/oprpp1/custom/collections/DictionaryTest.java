@@ -117,6 +117,11 @@ public class DictionaryTest {
     }
 
     @Test
+    void testGetDifferentType() {
+        assertNull(dictionaryContainingEntriesIntString.get("first"));
+    }
+
+    @Test
     void testRemoveExistingEntry() {
         assertEquals("B", dictionaryContainingEntriesIntString.remove(2));
         assertNull(dictionaryContainingEntriesIntString.get(2));
@@ -124,7 +129,7 @@ public class DictionaryTest {
 
     @Test
     void testRemoveEntryThatDoesNotExist() {
-
+        assertNull(dictionaryContainingEntriesIntString.remove(4));
     }
 
     @Test
