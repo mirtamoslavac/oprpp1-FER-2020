@@ -11,16 +11,16 @@ public class ArrayIndexedCollectionTest {
 
     private final Random rand = new Random();
 
-    private ArrayIndexedCollection emptyCollection;
-    private ArrayIndexedCollection twoElementCollection;
-    private ArrayIndexedCollection fiveElementCollection;
-    private ArrayIndexedCollection fullCollection;
-    private ArrayIndexedCollection persistentCollection;
+    private ArrayIndexedCollection<Object> emptyCollection;
+    private ArrayIndexedCollection<Object> twoElementCollection;
+    private ArrayIndexedCollection<Object> fiveElementCollection;
+    private ArrayIndexedCollection<Object> fullCollection;
+    private ArrayIndexedCollection<Object> persistentCollection;
 
     @BeforeEach
     void setUp() {
-        emptyCollection = new ArrayIndexedCollection();
-        twoElementCollection = new ArrayIndexedCollection();
+        emptyCollection = new ArrayIndexedCollection<>();
+        twoElementCollection = new ArrayIndexedCollection<>();
         for (int i = 0; i < 2; i++) {
             int randNum = rand.nextInt(5);
             switch (randNum) {
@@ -28,10 +28,10 @@ public class ArrayIndexedCollectionTest {
                 case 1 -> twoElementCollection.add(rand.nextInt(1000));
                 case 2 -> twoElementCollection.add(rand.nextBoolean());
                 case 3 -> twoElementCollection.add("testing testing!");
-                case 4 -> twoElementCollection.add(new ArrayIndexedCollection());
+                case 4 -> twoElementCollection.add(new ArrayIndexedCollection<>());
             }
         }
-        fiveElementCollection = new ArrayIndexedCollection();
+        fiveElementCollection = new ArrayIndexedCollection<>();
         for (int i = 0; i < 5; i++) {
             int randNum = rand.nextInt(5);
             switch (randNum) {
@@ -39,10 +39,10 @@ public class ArrayIndexedCollectionTest {
                 case 1 -> fiveElementCollection.add(rand.nextInt(1000));
                 case 2 -> fiveElementCollection.add(rand.nextBoolean());
                 case 3 -> fiveElementCollection.add("testing testing!");
-                case 4 -> fiveElementCollection.add(new ArrayIndexedCollection());
+                case 4 -> fiveElementCollection.add(new ArrayIndexedCollection<>());
             }
         }
-        fullCollection = new ArrayIndexedCollection(7);
+        fullCollection = new ArrayIndexedCollection<>(7);
         for (int i = 0; i < 7; i++) {
             int randNum = rand.nextInt(5);
             switch (randNum) {
@@ -50,11 +50,11 @@ public class ArrayIndexedCollectionTest {
                 case 1 -> fullCollection.add(rand.nextInt(1000));
                 case 2 -> fullCollection.add(rand.nextBoolean());
                 case 3 -> fullCollection.add("testing testing!");
-                case 4 -> fullCollection.add(new ArrayIndexedCollection());
+                case 4 -> fullCollection.add(new ArrayIndexedCollection<>());
             }
         }
 
-        persistentCollection = new ArrayIndexedCollection(3);
+        persistentCollection = new ArrayIndexedCollection<>(3);
         persistentCollection.add(123);
         persistentCollection.add(456);
         persistentCollection.add(789);
@@ -62,54 +62,54 @@ public class ArrayIndexedCollectionTest {
 
     @Test
     public void testNumberOfContainingElementsInEmptyCollectionConstructor1() {
-        assertEquals(0, new ArrayIndexedCollection().size());
+        assertEquals(0, new ArrayIndexedCollection<>().size());
     }
 
     @Test
     public void testNumberOfContainingElementsInEmptyCollectionConstructor2() {
-        assertEquals(0, new ArrayIndexedCollection(7).size());
+        assertEquals(0, new ArrayIndexedCollection<>(7).size());
     }
 
     @Test
     public void testNumberOfContainingElementsInEmptyCollectionConstructor3() {
-        assertEquals(0, new ArrayIndexedCollection(emptyCollection).size());
+        assertEquals(0, new ArrayIndexedCollection<>(emptyCollection).size());
     }
 
     @Test
     public void testNumberOfContainingElementsInEmptyCollectionConstructor4() {
-        assertEquals(0, new ArrayIndexedCollection(emptyCollection, 7).size());
+        assertEquals(0, new ArrayIndexedCollection<>(emptyCollection, 7).size());
     }
 
     @Test
     public void testNumberOfContainingElementsInNonEmptyCollectionConstructor3() {
-        assertEquals(5, new ArrayIndexedCollection(fiveElementCollection).size());
+        assertEquals(5, new ArrayIndexedCollection<>(fiveElementCollection).size());
     }
 
     @Test
     public void testNumberOfContainingElementsInNonEmptyCollectionConstructor4() {
-        assertEquals(5, new ArrayIndexedCollection(fiveElementCollection, 7).size());
+        assertEquals(5, new ArrayIndexedCollection<>(fiveElementCollection, 7).size());
     }
 
 
     @Test
     public void testIncorrectInitialCapacityShouldThrowConstructor2() {
-        assertThrows(IllegalArgumentException.class, () -> new ArrayIndexedCollection(-1));
+        assertThrows(IllegalArgumentException.class, () -> new ArrayIndexedCollection<>(-1));
     }
 
     @Test
     public void testIncorrectInitialCapacityShouldThrowConstructor4() {
-        assertThrows(IllegalArgumentException.class, () -> new ArrayIndexedCollection(fiveElementCollection, 0));
+        assertThrows(IllegalArgumentException.class, () -> new ArrayIndexedCollection<>(fiveElementCollection, 0));
     }
 
     @Test
     public void testPassNullAsOtherCollectionShouldThrowConstructor2() {
-        assertThrows(NullPointerException.class, () -> new ArrayIndexedCollection(null));
+        assertThrows(NullPointerException.class, () -> new ArrayIndexedCollection<>(null));
     }
 
     @Test
     public void testPassNullAsOtherCollectionShouldThrowConstructor4() {
-        assertThrows(NullPointerException.class, () -> new ArrayIndexedCollection(null, 7));
-        assertThrows(NullPointerException.class, () -> new ArrayIndexedCollection(null, 0));
+        assertThrows(NullPointerException.class, () -> new ArrayIndexedCollection<>(null, 7));
+        assertThrows(NullPointerException.class, () -> new ArrayIndexedCollection<>(null, 0));
     }
 
     @Test
@@ -208,7 +208,7 @@ public class ArrayIndexedCollectionTest {
     public void testForEach(){
         Object[] resultArray = new Object[5];
 
-        class TestingProcessor implements Processor {
+        class TestingProcessor implements Processor<Object> {
             @Override
             public void process(Object value) {
                     int valueInt = (int)value;
@@ -216,7 +216,7 @@ public class ArrayIndexedCollectionTest {
             }
         }
 
-        ArrayIndexedCollection testForEachCollection = new ArrayIndexedCollection(5);
+        ArrayIndexedCollection<Object> testForEachCollection = new ArrayIndexedCollection<>(5);
         testForEachCollection.add(1);
         testForEachCollection.add(2);
         testForEachCollection.add(3);
@@ -232,7 +232,7 @@ public class ArrayIndexedCollectionTest {
     @Test
     public void testClearEmptyCollection() {
         emptyCollection.clear();
-        assertEquals(new ArrayIndexedCollection(), emptyCollection);
+        assertEquals(new ArrayIndexedCollection<>(), emptyCollection);
     }
 
     @Test
@@ -388,22 +388,22 @@ public class ArrayIndexedCollectionTest {
 
     @Test
     public void testEqualsEmptyCollections() {
-        assertTrue(emptyCollection.equals(new ArrayIndexedCollection(emptyCollection)));
+        assertEquals(new ArrayIndexedCollection<>(emptyCollection), emptyCollection);
     }
 
     @Test
     public void testEqualsCollectionsContainingElements() {
-        assertTrue(fiveElementCollection.equals(new ArrayIndexedCollection(fiveElementCollection)));
+        assertEquals(new ArrayIndexedCollection<>(fiveElementCollection), fiveElementCollection);
     }
 
     @Test
     public void testHashCodeEmptyCollection() {
-        assertEquals(emptyCollection.hashCode(), new ArrayIndexedCollection(emptyCollection).hashCode());
+        assertEquals(emptyCollection.hashCode(), new ArrayIndexedCollection<>(emptyCollection).hashCode());
     }
 
     @Test
     public void testHashCodeCollectionsContainingElement() {
-        assertEquals(fiveElementCollection.hashCode(), new ArrayIndexedCollection(fiveElementCollection).hashCode());
+        assertEquals(fiveElementCollection.hashCode(), new ArrayIndexedCollection<>(fiveElementCollection).hashCode());
     }
 
 }

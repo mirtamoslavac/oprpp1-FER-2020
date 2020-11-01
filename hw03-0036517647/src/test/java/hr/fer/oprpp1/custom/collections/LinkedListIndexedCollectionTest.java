@@ -11,15 +11,15 @@ public class LinkedListIndexedCollectionTest {
 
     private final Random rand = new Random();
 
-    private LinkedListIndexedCollection emptyCollection;
-    private LinkedListIndexedCollection twoElementCollection;
-    private LinkedListIndexedCollection fiveElementCollection;
-    private LinkedListIndexedCollection persistentCollection;
+    private LinkedListIndexedCollection<Object> emptyCollection;
+    private LinkedListIndexedCollection<Object> twoElementCollection;
+    private LinkedListIndexedCollection<Object> fiveElementCollection;
+    private LinkedListIndexedCollection<Object> persistentCollection;
 
     @BeforeEach
     void setUp() {
-        emptyCollection = new LinkedListIndexedCollection();
-        twoElementCollection = new LinkedListIndexedCollection();
+        emptyCollection = new LinkedListIndexedCollection<>();
+        twoElementCollection = new LinkedListIndexedCollection<>();
         for (int i = 0; i < 2; i++) {
             int randNum = rand.nextInt(5);
             switch (randNum) {
@@ -27,10 +27,10 @@ public class LinkedListIndexedCollectionTest {
                 case 1 -> twoElementCollection.add(rand.nextInt(1000));
                 case 2 -> twoElementCollection.add(rand.nextBoolean());
                 case 3 -> twoElementCollection.add("testing testing!");
-                case 4 -> twoElementCollection.add(new LinkedListIndexedCollection());
+                case 4 -> twoElementCollection.add(new LinkedListIndexedCollection<>());
             }
         }
-        fiveElementCollection = new LinkedListIndexedCollection();
+        fiveElementCollection = new LinkedListIndexedCollection<>();
         for (int i = 0; i < 5; i++) {
             int randNum = rand.nextInt(5);
             switch (randNum) {
@@ -38,11 +38,11 @@ public class LinkedListIndexedCollectionTest {
                 case 1 -> fiveElementCollection.add(rand.nextInt(1000));
                 case 2 -> fiveElementCollection.add(rand.nextBoolean());
                 case 3 -> fiveElementCollection.add("testing testing!");
-                case 4 -> fiveElementCollection.add(new LinkedListIndexedCollection());
+                case 4 -> fiveElementCollection.add(new LinkedListIndexedCollection<>());
             }
         }
 
-        persistentCollection = new LinkedListIndexedCollection();
+        persistentCollection = new LinkedListIndexedCollection<>();
         persistentCollection.add(123);
         persistentCollection.add(456);
         persistentCollection.add(789);
@@ -50,19 +50,19 @@ public class LinkedListIndexedCollectionTest {
 
     @Test
     public void testNumberOfContainingElementsInEmptyCollectionConstructor1() {
-        assertEquals(0, new LinkedListIndexedCollection().size());
+        assertEquals(0, new LinkedListIndexedCollection<>().size());
     }
     
 
     @Test
     public void testNumberOfContainingElementsInEmptyCollectionConstructor2() {
-        assertEquals(0, new LinkedListIndexedCollection(emptyCollection).size());
+        assertEquals(0, new LinkedListIndexedCollection<>(emptyCollection).size());
     }
     
 
     @Test
     public void testNumberOfContainingElementsInNonEmptyCollectionConstructor2() {
-        assertEquals(5, new LinkedListIndexedCollection(fiveElementCollection).size());
+        assertEquals(5, new LinkedListIndexedCollection<>(fiveElementCollection).size());
     }
 
     @Test
@@ -146,7 +146,7 @@ public class LinkedListIndexedCollectionTest {
     public void testForEach(){
         Object[] resultArray = new Object[5];
 
-        class TestingProcessor implements Processor {
+        class TestingProcessor implements Processor<Object> {
             @Override
             public void process(Object value) {
                 int valueInt = (int)value;
@@ -154,7 +154,7 @@ public class LinkedListIndexedCollectionTest {
             }
         }
 
-        LinkedListIndexedCollection testForEachCollection = new LinkedListIndexedCollection();
+        LinkedListIndexedCollection<Object> testForEachCollection = new LinkedListIndexedCollection<>();
         testForEachCollection.add(1);
         testForEachCollection.add(2);
         testForEachCollection.add(3);
@@ -170,7 +170,7 @@ public class LinkedListIndexedCollectionTest {
     @Test
     public void testClearEmptyCollection() {
         emptyCollection.clear();
-        assertArrayEquals(new LinkedListIndexedCollection().toArray(), emptyCollection.toArray());
+        assertArrayEquals(new LinkedListIndexedCollection<>().toArray(), emptyCollection.toArray());
     }
 
     @Test
