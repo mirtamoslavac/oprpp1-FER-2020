@@ -147,7 +147,7 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
     }
 
     /**
-     * Inserts the given key and value as a {@link SimpleHashtable.TableEntry} instance in the current hashtable.
+     * Inserts the given key and value as a {@link TableEntry} instance in the current hashtable.
      * If an entry with the same {@code key} that is given already exists, then the old {@code value} will be overwritten by the new one.
      *
      * @param key the key of the new {@code TableEntry} instance.
@@ -168,6 +168,7 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
                 if (hashtableElement.key.equals(key)) {
                     V oldValue = hashtableElement.value;
                     hashtableElement.setValue(value);
+
                     return oldValue;
                 }
 
@@ -180,6 +181,7 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
             this.hashtable[slot] = new TableEntry<>(key, value);
             this.size++;
             this.modificationCount++;
+
             return null;
         }
 
@@ -230,6 +232,9 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
      */
     public boolean containsKey(Object key) {
         if (key == null) return false;
+
+        if (this.isValueNull(key)) return true;
+
         return this.get(key) != null;
     }
 
@@ -267,17 +272,21 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
         TableEntry<K,V> hashtableElement = this.hashtable[slot];
         if (hashtableElement.key.equals(key)) {
             value = hashtableElement.value;
+
             this.hashtable[slot] = hashtableElement.next;
             this.size--;
             this.modificationCount++;
         } else {
             TableEntry<K,V> previous;
+
             while (hashtableElement.next != null) {
                 previous = hashtableElement;
                 hashtableElement = hashtableElement.next;
+
                 if (hashtableElement.key.equals(key)) {
                     value = hashtableElement.value;
                     previous.next = hashtableElement.next;
+
                     this.size--;
                     this.modificationCount++;
                     break;
@@ -304,13 +313,14 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
 
         for (TableEntry<K, V> hashtableElement : this.hashtable) {
             while (hashtableElement != null) {
-                sb.append(hashtableElement.key.toString())
-                        .append("=");
+                sb.append(hashtableElement.key.toString()).append("=");
+
                 if (hashtableElement.value != null) {
                     sb.append(hashtableElement.value.toString());
                 } else {
                     sb.append((Object) null);
                 }
+
                 sb.append(", ");
 
                 hashtableElement = hashtableElement.next;
@@ -381,10 +391,10 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
             return initialNumberOfSlots;
         }
 
-        int newCapacity;
-        for (newCapacity = 1; newCapacity < initialNumberOfSlots; newCapacity *= 2);
-        return newCapacity;
+        int newCapacity = 1;
+        for (; newCapacity < initialNumberOfSlots; newCapacity *= 2);
 
+        return newCapacity;
     }
 
     /**
@@ -402,15 +412,29 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
             TableEntry<K, V> currentEntry = this.hashtable[slot];
 
             TableEntry<K, V> hashtableElement = this.hashtable[slot];
+            TableEntry<K, V> newHashtableEntry = new TableEntry<>(hashtableEntry.key, hashtableEntry.value);
             if (currentEntry == null) {
-                this.hashtable[slot] = new TableEntry<>(hashtableEntry.key, hashtableEntry.value);
+                this.hashtable[slot] = newHashtableEntry;
             } else {
                 for(; hashtableElement.next != null; hashtableElement = hashtableElement.next);
-                hashtableElement.next = new TableEntry<>(hashtableEntry.key, hashtableEntry.value);
+                hashtableElement.next = newHashtableEntry;
             }
         }
 
         this.modificationCount++;
+    }
+
+    public boolean isValueNull(Object key) {
+        TableEntry<K, V> hashtableElement = this.hashtable[getSlot(key)];
+        while (hashtableElement != null) {
+            if (hashtableElement.key.equals(key) && hashtableElement.value == null)
+                return true;
+
+            hashtableElement = hashtableElement.next;
+        }
+
+        return false;
+
     }
 
     /**
@@ -484,12 +508,12 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
          * Finds the next {@link TableEntry} instance in the current hashtable that is to be processed by the current iterator.
          */
         private void findNextTableEntry() {
-            if (this.currentTableEntry != null && this.currentTableEntry.next != null) this.nextTableEntry = this.currentTableEntry.next;
-            else {
-                int oldSlot = this.currentSlot;
-                for(; this.currentSlot < hashtable.length - 1 && (hashtable[this.currentSlot] == null || this.currentTableEntry == this.nextTableEntry && this.nextTableEntry != null); this.currentSlot++);
-                if (this.currentSlot < hashtable.length && oldSlot != this.currentSlot) this.nextTableEntry = hashtable[this.currentSlot];
-                else this.nextTableEntry = null;
+            if (this.nextTableEntry != null) this.nextTableEntry = this.nextTableEntry.next;
+
+            while (this.nextTableEntry == null) {
+                if (++this.currentSlot >= hashtable.length) break;
+
+                this.nextTableEntry = hashtable[this.currentSlot];
             }
         }
     }
