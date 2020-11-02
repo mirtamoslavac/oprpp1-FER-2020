@@ -424,6 +424,11 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
         this.modificationCount++;
     }
 
+    /**
+     * Determines whether the {@code value} of the entry is {@code null}.
+     * @param key {@code key} of the required entry.
+     * @return {@code true} if the entry's value is {@code null}, {@code false} otherwise.
+     */
     public boolean isValueNull(Object key) {
         TableEntry<K, V> hashtableElement = this.hashtable[getSlot(key)];
         while (hashtableElement != null) {
