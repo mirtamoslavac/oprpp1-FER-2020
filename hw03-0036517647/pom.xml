@@ -7,7 +7,7 @@
     <groupId>hr.fer.oprpp1.0036517647</groupId>
     <artifactId>hw03-0036517647</artifactId>
     <version>1.0</version>
-    <name>OPRPP1 Homework 02</name>
+    <name>OPRPP1 Homework 03</name>
 
     <properties>
         <maven.compiler.source>15</maven.compiler.source>
