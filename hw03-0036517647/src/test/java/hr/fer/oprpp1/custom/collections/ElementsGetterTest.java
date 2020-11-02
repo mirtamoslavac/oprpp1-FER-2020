@@ -15,12 +15,12 @@ public class ElementsGetterTest {
 
     @Test
     public void testGettingAllTheElements() {
-        Collection col = new ArrayIndexedCollection();
+        Collection<String> col = new ArrayIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<String> getter = col.createElementsGetter();
 
         assertTrue(getter.hasNextElement());
         assertEquals("Ivo", getter.getNextElement());
@@ -35,12 +35,12 @@ public class ElementsGetterTest {
 
     @Test
     public void testCheckingWhetherANextElementExistsMultipleTimes() {
-        Collection col = new LinkedListIndexedCollection();
+        Collection<String> col = new LinkedListIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<String> getter = col.createElementsGetter();
 
         assertTrue(getter.hasNextElement());
         assertTrue(getter.hasNextElement());
@@ -64,12 +64,12 @@ public class ElementsGetterTest {
 
     @Test
     public void testGettingAllTheElementsWithoutPreviouslyCheckingIfExisting() {
-        Collection col = new LinkedListIndexedCollection();
+        Collection<String> col = new LinkedListIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<String> getter = col.createElementsGetter();
 
         assertEquals("Ivo", getter.getNextElement());
         assertEquals("Ana", getter.getNextElement());
@@ -80,13 +80,13 @@ public class ElementsGetterTest {
 
     @Test
     public void testMultipleIndependentGettersForTheSameCollection() {
-        Collection col = new LinkedListIndexedCollection();
+        Collection<String> col = new LinkedListIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter1 = col.createElementsGetter();
-        ElementsGetter getter2 = col.createElementsGetter();
+        ElementsGetter<String> getter1 = col.createElementsGetter();
+        ElementsGetter<String> getter2 = col.createElementsGetter();
 
         assertEquals("Ivo", getter1.getNextElement());
         assertEquals("Ana", getter1.getNextElement());
@@ -97,8 +97,8 @@ public class ElementsGetterTest {
 
     @Test
     public void testMultipleIndependentGettersForTheDifferentCollections() {
-        Collection col1 = new ArrayIndexedCollection();
-        Collection col2 = new ArrayIndexedCollection();
+        Collection<String> col1 = new ArrayIndexedCollection<>();
+        Collection<String> col2 = new ArrayIndexedCollection<>();
         col1.add("Ivo");
         col1.add("Ana");
         col1.add("Jasna");
@@ -106,9 +106,9 @@ public class ElementsGetterTest {
         col2.add("Štefanija");
         col2.add("Karmela");
 
-        ElementsGetter getter1 = col1.createElementsGetter();
-        ElementsGetter getter2 = col1.createElementsGetter();
-        ElementsGetter getter3 = col2.createElementsGetter();
+        ElementsGetter<String> getter1 = col1.createElementsGetter();
+        ElementsGetter<String> getter2 = col1.createElementsGetter();
+        ElementsGetter<String> getter3 = col2.createElementsGetter();
 
         assertEquals("Ivo", getter1.getNextElement());
         assertEquals("Ana", getter1.getNextElement());
@@ -119,12 +119,12 @@ public class ElementsGetterTest {
 
     @Test
     public void testInvalidGettingAfterModifyingTheCollectionThrows() {
-        Collection col = new ArrayIndexedCollection();
+        Collection<String> col = new ArrayIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<String> getter = col.createElementsGetter();
 
         assertEquals("Ivo", getter.getNextElement());
         assertEquals("Ana", getter.getNextElement());
@@ -134,12 +134,12 @@ public class ElementsGetterTest {
 
     @Test
     public void testProcessRemainingUnfetchedElementsWithinACollection() {
-        Collection col = new ArrayIndexedCollection();
+        Collection<String> col = new ArrayIndexedCollection<>();
         col.add("Ivo");
         col.add("Ana");
         col.add("Jasna");
 
-        ElementsGetter getter = col.createElementsGetter();
+        ElementsGetter<String> getter = col.createElementsGetter();
         assertEquals("Ivo", getter.getNextElement());
 
         getter.processRemaining(System.out::println);
@@ -147,8 +147,8 @@ public class ElementsGetterTest {
 
     @Test
     public void testAddAllElementsSatisfyingAGivenConditionFromOneCollectionToAnother() {
-        Collection col1 = new LinkedListIndexedCollection();
-        Collection col2 = new ArrayIndexedCollection();
+        Collection<Integer> col1 = new LinkedListIndexedCollection<>();
+        Collection<Integer> col2 = new ArrayIndexedCollection<>();
         col1.add(2);
         col1.add(3);
         col1.add(4);
@@ -163,12 +163,12 @@ public class ElementsGetterTest {
 
     @Test
     public void testUpcasting() {
-        List col1list = new ArrayIndexedCollection();
-        List col2list = new LinkedListIndexedCollection();
+        List<String> col1list = new ArrayIndexedCollection<>();
+        List<String> col2list = new LinkedListIndexedCollection<>();
         col1list.add("Ivana");
         col2list.add("Jasna");
-        Collection col3 = col1list;
-        Collection col4 = col2list;
+        Collection<String> col3 = col1list;
+        Collection<String> col4 = col2list;
         col1list.get(0);
         col2list.get(0);
         //col3.get(0); //cannot resolve method in parent class Collection
