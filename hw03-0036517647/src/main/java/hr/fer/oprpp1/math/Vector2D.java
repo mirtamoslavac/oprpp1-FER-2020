@@ -86,6 +86,7 @@ public class Vector2D {
     public void rotate(double angle) {
         double oldX = this.x;
         double oldY = this.y;
+
         this.x = oldX * cos(angle) - oldY * sin(angle);
         this.y = oldX * sin(angle) + oldY * cos(angle);
     }

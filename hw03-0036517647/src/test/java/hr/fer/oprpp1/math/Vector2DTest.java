@@ -51,7 +51,6 @@ public class Vector2DTest {
         assertThrows(NullPointerException.class, () -> tested2DVector.add(null));
     }
 
-
     @Test
     public void testAdded() {
         tested2DVector = new Vector2D(4, -4);
@@ -89,7 +88,7 @@ public class Vector2DTest {
     }
 
     @Test
-    public void testRotate0() {
+    public void testRotateFor0Degrees() {
         tested2DVector = new Vector2D(4, -4);
         double oldX = tested2DVector.getX();
         double oldY = tested2DVector.getY();
@@ -101,7 +100,7 @@ public class Vector2DTest {
     }
 
     @Test
-    public void testRotate360() {
+    public void testRotateFor360Degrees() {
         tested2DVector = new Vector2D(4, -4);
         double oldX = tested2DVector.getX();
         double oldY = tested2DVector.getY();
@@ -128,14 +127,14 @@ public class Vector2DTest {
     }
 
     @Test
-    public void testRotated0() {
+    public void testRotatedFor0Degrees() {
         tested2DVector = new Vector2D(4, -4);
 
         assertEquals(tested2DVector.rotated(0), tested2DVector);
     }
 
     @Test
-    public void testRotated360() {
+    public void testRotatedFor360Degrees() {
         tested2DVector = new Vector2D(4, -4);
         double oldX = tested2DVector.getX();
         double oldY = tested2DVector.getY();
@@ -160,7 +159,7 @@ public class Vector2DTest {
     }
 
     @Test
-    public void testScale0() {
+    public void testScaleBy0() {
         tested2DVector = new Vector2D(4, -4);
 
         tested2DVector.scale(0);
@@ -170,7 +169,7 @@ public class Vector2DTest {
     }
 
     @Test
-    public void testScale1() {
+    public void testScaleBy1() {
         tested2DVector = new Vector2D(4, -4);
         double oldX = tested2DVector.getX();
         double oldY = tested2DVector.getY();
@@ -207,7 +206,7 @@ public class Vector2DTest {
     }
 
     @Test
-    public void testScaled0() {
+    public void testScaledBy0() {
         tested2DVector = new Vector2D(4, -4);
         double oldX = tested2DVector.getX();
         double oldY = tested2DVector.getY();
@@ -222,7 +221,7 @@ public class Vector2DTest {
     }
 
     @Test
-    public void testScaled1() {
+    public void testScaledBy1() {
         tested2DVector = new Vector2D(4, -4);
         double oldX = tested2DVector.getX();
         double oldY = tested2DVector.getY();
