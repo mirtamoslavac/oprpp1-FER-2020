@@ -517,4 +517,21 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
             }
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SimpleHashtable)) return false;
+        SimpleHashtable<?, ?> that = (SimpleHashtable<?, ?>) o;
+        return size == that.size &&
+                modificationCount == that.modificationCount &&
+                Arrays.equals(hashtable, that.hashtable);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(size, modificationCount);
+        result = 31 * result + Arrays.hashCode(hashtable);
+        return result;
+    }
 }
