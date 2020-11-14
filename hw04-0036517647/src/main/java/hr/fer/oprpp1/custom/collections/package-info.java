@@ -1,0 +1,6 @@
+/**
+ * Package containing custom collection implementations.
+ *
+ * @since 1.0
+ */
+package hr.fer.oprpp1.custom.collections;
