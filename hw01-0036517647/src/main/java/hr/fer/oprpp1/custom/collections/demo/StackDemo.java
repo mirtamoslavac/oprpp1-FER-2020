@@ -8,6 +8,7 @@ import hr.fer.oprpp1.custom.collections.ObjectStack;
  * The expression must be in postfix representation.
  *
  * @author mirtamoslavac
+ * @version 1.0
  */
 public class StackDemo {
     /**

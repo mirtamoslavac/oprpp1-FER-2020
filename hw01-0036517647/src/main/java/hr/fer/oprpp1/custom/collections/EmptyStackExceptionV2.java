@@ -4,7 +4,7 @@ package hr.fer.oprpp1.custom.collections;
  * Thrown to indicate that one is accessing elements of the stack when it's empty.
  *
  * @author  mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class EmptyStackExceptionV2 extends RuntimeException {
 
@@ -15,6 +15,7 @@ public class EmptyStackExceptionV2 extends RuntimeException {
      * Constructs an {@code EmptyStackExceptionV2} with no detail message.
      */
     public EmptyStackExceptionV2() {
+        super();
     }
 
     /**

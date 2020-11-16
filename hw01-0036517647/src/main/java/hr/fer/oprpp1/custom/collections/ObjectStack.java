@@ -4,6 +4,9 @@ package hr.fer.oprpp1.custom.collections;
 /**
  * The {@code ObjectStack} class represents the implementation of a stack-like collection.
  * It serves as the Adaptor in the Adapter pattern.
+ *
+ * @author mirtamoslavac
+ * @version 1.0
  */
 public class ObjectStack {
 
