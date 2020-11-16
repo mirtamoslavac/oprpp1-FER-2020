@@ -42,7 +42,7 @@ public interface Collection<T> {
     boolean contains(Object value);
 
     /**
-     * Removes one occurrence of the given object, that exists within the current collection, from it.
+     * Removes one occurrence of the given object that exists within the current collection from it.
      *
      * @param value object whose single occurrence (of many possible) is to be removed from this collection.
      * @return {@code true} only if the collection contains the given value and removes it, {@code false} if otherwise
