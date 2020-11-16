@@ -13,7 +13,7 @@ import java.util.Scanner;
  * The {@code StudentDB} class is a command-line executor of multiple queries on an already defined database.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class StudentDB {
     /**
@@ -33,9 +33,10 @@ public class StudentDB {
      */
     public static void main(String[] args) {
         List<String> rows = null;
+
         try {
              rows = Files.readAllLines(
-                    Paths.get("./src/main/resources/database.txt"),
+                    Paths.get("./database.txt"),
                     StandardCharsets.UTF_8
             );
         } catch (IOException e) {
