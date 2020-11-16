@@ -323,4 +323,24 @@ public class LinkedListIndexedCollectionTest {
         assertFalse(persistentCollection.contains(null));
     }
 
+    @Test
+    public void testEqualsEmptyCollections() {
+        assertTrue(emptyCollection.equals(new LinkedListIndexedCollection(emptyCollection)));
+    }
+
+    @Test
+    public void testEqualsCollectionsContainingElements() {
+        assertTrue(fiveElementCollection.equals(new LinkedListIndexedCollection(fiveElementCollection)));
+    }
+
+    @Test
+    public void testHashCodeEmptyCollection() {
+        assertEquals(emptyCollection.hashCode(), new LinkedListIndexedCollection(emptyCollection).hashCode());
+    }
+
+    @Test
+    public void testHashCodeCollectionsContainingElement() {
+        assertEquals(fiveElementCollection.hashCode(), new LinkedListIndexedCollection(fiveElementCollection).hashCode());
+    }
+
 }

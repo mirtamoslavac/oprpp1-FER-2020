@@ -15,6 +15,7 @@ import static java.lang.Double.isNaN;
  * The {@code ComplexNumber} class represents an implementation of an unmodifiable complex number.
  *
  * @author mirtamoslavac
+ * @version 1.1
  */
 public class ComplexNumber {
 
@@ -108,15 +109,20 @@ public class ComplexNumber {
                 s = s.substring(1);
                 negativeReal = true;
             }
+
             s = s.substring(0, s.length() - 1);
+
             int operatorIndex;
             if (s.contains("+")) {
                 operatorIndex = s.indexOf("+");
             } else {
                 operatorIndex = s.indexOf("-");
             }
+
             double real = !negativeReal ? parseDouble(s.substring(0, operatorIndex)) : parseDouble("-" + s.substring(0, operatorIndex));
+
             double imaginary = s.substring(operatorIndex).equals("+") ? 1 : s.substring(operatorIndex).equals("-") ? -1 : parseDouble(s.substring(operatorIndex));
+
             return new ComplexNumber(real, imaginary);
         } else if (s.matches(regexReal)) {
                 return new ComplexNumber(parseDouble(s), 0.);
@@ -270,7 +276,6 @@ public class ComplexNumber {
      *
      * @return string representation of the current complex number.
      */
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -7,7 +7,7 @@ import java.util.Objects;
  * Duplicate elements are allowed, while the storage of {@code null} references is not.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class LinkedListIndexedCollection extends Collection {
 
@@ -53,7 +53,18 @@ public class LinkedListIndexedCollection extends Collection {
             this.value = value;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ListNode)) return false;
+            ListNode listNode = (ListNode) o;
+            return Objects.equals(this.value, listNode.value);
+        }
 
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
     }
 
     /**
@@ -128,7 +139,7 @@ public class LinkedListIndexedCollection extends Collection {
             insertedNode.next = currentNode;
             currentNode.previous = insertedNode;
         }
-        size++;
+        this.size++;
     }
 
     /**
@@ -185,7 +196,7 @@ public class LinkedListIndexedCollection extends Collection {
             removedNode.next = null;
             removedNode.value = null;
         }
-        size--;
+        this.size--;
     }
 
     /**
@@ -302,5 +313,20 @@ public class LinkedListIndexedCollection extends Collection {
         }
 
         return currentNode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LinkedListIndexedCollection)) return false;
+        LinkedListIndexedCollection that = (LinkedListIndexedCollection) o;
+        return this.size == that.size &&
+                Objects.equals(this.first, that.first) &&
+                Objects.equals(this.last, that.last);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.size, this.first, this.last);
     }
 }

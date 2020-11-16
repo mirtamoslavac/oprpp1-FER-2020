@@ -15,6 +15,7 @@ public class EmptyStackExceptionV2 extends RuntimeException {
      * Constructs an {@code EmptyStackExceptionV2} with no detail message.
      */
     public EmptyStackExceptionV2() {
+        super();
     }
 
     /**

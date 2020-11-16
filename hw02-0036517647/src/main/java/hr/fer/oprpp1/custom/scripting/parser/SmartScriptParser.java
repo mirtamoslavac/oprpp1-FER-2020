@@ -58,6 +58,11 @@ public class SmartScriptParser {
         }
     }
 
+    /**
+     * Returns the document node of the current parser.
+     *
+     * @return {@link DocumentNode} instance of the parser.
+     */
     public DocumentNode getDocumentNode() {
         return this.documentNode;
     }

@@ -4,7 +4,7 @@ package hr.fer.oprpp1.custom.collections;
  * The {@code Collection} class represents a general collection of objects.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class Collection {
 
@@ -53,10 +53,10 @@ public class Collection {
     }
 
     /**
-     * Removes one occurrence of the given object, that exists within the current collection, from it.
+     * Removes one occurrence of the given object that exists within the current collection from it.
      *
      * @param value object whose single occurrence (of many possible) is to be removed from this collection.
-     * @return {@code true} only if the collection contains the given value and removes it, {@code false} if otherwise
+     * @return {@code true} only if the collection contains the given value and removes it, {@code false} if otherwise.
      */
     public boolean remove(Object value){
         return false;
@@ -64,19 +64,13 @@ public class Collection {
 
     /**
      * Allocates a new array with the size that equals to the size of this collection, fills it with collection content and
-     * returns the array.
+     * returns the array. It should never return null!
      *
-     * @throws UnsupportedOperationException when attempting to return an unallocated array.
+     * @throws UnsupportedOperationException when the operation has not yet been implemented.
      * @return array filled with objects contained within the current collection.
      */
     public Object[] toArray() {
-        Object[] objectArray = null;
-
-        if (objectArray == null){
-            throw new UnsupportedOperationException("The toArray method should never return null!");
-        }
-
-        return objectArray;
+        throw new UnsupportedOperationException("The requested operation is not supported!");
     }
 
     /**
@@ -101,6 +95,9 @@ public class Collection {
 
         /**
          * {@code AddAllElementsProcessor} is a local class that is used to add all elements of the given collection into the current collection.
+         *
+         * @author mirtamoslavac
+         * @version 1.0
          */
         class AddAllElementsProcessor extends Processor {
 
