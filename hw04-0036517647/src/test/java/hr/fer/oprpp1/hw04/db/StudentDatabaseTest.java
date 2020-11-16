@@ -19,7 +19,7 @@ public class StudentDatabaseTest {
     @BeforeEach
     void setUp() throws IOException {
        this.database = new StudentDatabase(Files.readAllLines(
-                Paths.get("src/main/resources/database.txt"),
+                Paths.get("./database.txt"),
                 StandardCharsets.UTF_8));
     }
 
