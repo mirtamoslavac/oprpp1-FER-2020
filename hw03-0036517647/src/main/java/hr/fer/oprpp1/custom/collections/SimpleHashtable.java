@@ -10,7 +10,7 @@ import static java.lang.Math.abs;
  * @param <K> type of every key object in the current hashtable.
  * @param <V> type of every value object in the current hashtable.
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry<K,V>>{
 
@@ -429,7 +429,7 @@ public class SimpleHashtable<K,V> implements Iterable<SimpleHashtable.TableEntry
      * @param key {@code key} of the required entry.
      * @return {@code true} if the entry's value is {@code null}, {@code false} otherwise.
      */
-    public boolean isValueNull(Object key) {
+    private boolean isValueNull(Object key) {
         TableEntry<K, V> hashtableElement = this.hashtable[getSlot(key)];
         while (hashtableElement != null) {
             if (hashtableElement.key.equals(key) && hashtableElement.value == null)

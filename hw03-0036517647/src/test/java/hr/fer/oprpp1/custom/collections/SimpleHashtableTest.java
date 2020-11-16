@@ -3,7 +3,9 @@ package hr.fer.oprpp1.custom.collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,14 +17,14 @@ public class SimpleHashtableTest {
 
     @BeforeEach
     void setUp() {
-        emptyHashtable = new SimpleHashtable<>();
-        examMarks = new SimpleHashtable<>(2);
-        examMarks.put("Ivana", 2);
-        examMarks.put("Ante", 2);
-        examMarks.put("Jasna", 2);
-        examMarks.put("Kristina", 5);
-        examMarks.put("Marta", null);
-        examMarks.put("Ivana", 5);
+        this.emptyHashtable = new SimpleHashtable<>();
+        this.examMarks = new SimpleHashtable<>(2);
+        this.examMarks.put("Ivana", 2);
+        this.examMarks.put("Ante", 2);
+        this.examMarks.put("Jasna", 2);
+        this.examMarks.put("Kristina", 5);
+        this.examMarks.put("Marta", null);
+        this.examMarks.put("Ivana", 5);
     }
 
     @Test
@@ -32,138 +34,138 @@ public class SimpleHashtableTest {
 
     @Test
     void testPutNew() {
-        int oldSize = examMarks.size();
+        int oldSize = this.examMarks.size();
 
-        assertNull(examMarks.put("Helena", 4));
+        assertNull(this.examMarks.put("Helena", 4));
 
-        assertNotEquals(oldSize, examMarks.size());
-        assertEquals(oldSize + 1, examMarks.size());
+        assertNotEquals(oldSize, this.examMarks.size());
+        assertEquals(oldSize + 1, this.examMarks.size());
     }
 
     @Test
-    void testPutIllegal() {
-        assertThrows(NullPointerException.class, () -> examMarks.put(null, 4));
+    void testPutIllegalThrows() {
+        assertThrows(NullPointerException.class, () -> this.examMarks.put(null, 4));
     }
 
     @Test
     void testPutExistingOverwrite() {
-        int oldValue = examMarks.get("Kristina");
+        int oldValue = this.examMarks.get("Kristina");
         int newValue = 3;
-        int oldSize = examMarks.size();
-        int stillOldValue = examMarks.put("Kristina", newValue);
+        int oldSize = this.examMarks.size();
+        int stillOldValue = this.examMarks.put("Kristina", newValue);
 
-        assertNotEquals(oldValue, examMarks.get("Kristina"));
+        assertNotEquals(oldValue, this.examMarks.get("Kristina"));
         assertEquals(oldValue, stillOldValue);
-        assertEquals(newValue, examMarks.get("Kristina"));
-        assertEquals(oldSize, examMarks.size());
-        assertNotEquals(oldSize + 1, examMarks.size());
+        assertEquals(newValue, this.examMarks.get("Kristina"));
+        assertEquals(oldSize, this.examMarks.size());
+        assertNotEquals(oldSize + 1, this.examMarks.size());
     }
 
     @Test
     void testGetExisting() {
-        assertEquals(2, examMarks.get("Ante"));
+        assertEquals(2, this.examMarks.get("Ante"));
     }
 
     @Test
     void testGetNonExisting() {
-        assertNull(examMarks.get("Antun"));
+        assertNull(this.examMarks.get("Antun"));
     }
 
     @Test
     void testGetNonExistingDifferentType() {
-        assertNull(examMarks.get(123));
+        assertNull(this.examMarks.get(123));
     }
 
     @Test
     void testGetNull() {
-        assertNull(examMarks.get(null));
+        assertNull(this.examMarks.get(null));
     }
 
     @Test
     void testContainsKeyTrue() {
-        assertTrue(examMarks.containsKey("Marta"));
+        assertTrue(this.examMarks.containsKey("Marta"));
     }
 
     @Test
     void testContainsKeyFalse() {
-        assertFalse(examMarks.containsKey("Mirta"));
+        assertFalse(this.examMarks.containsKey("Mirta"));
     }
 
     @Test
     void testContainsValueTrue() {
-        assertTrue(examMarks.containsValue(5));
+        assertTrue(this.examMarks.containsValue(5));
     }
 
     @Test
     void testContainsValueNullTrue() {
-        assertTrue(examMarks.containsValue(null));
+        assertTrue(this.examMarks.containsValue(null));
     }
 
     @Test
     void testContainsValueFalse() {
-        assertFalse(examMarks.containsValue(3));
+        assertFalse(this.examMarks.containsValue(3));
     }
 
     @Test
     void testSizeEmptyHashtable() {
-        assertEquals(0, emptyHashtable.size());
+        assertEquals(0, this.emptyHashtable.size());
     }
 
     @Test
     void testSizeNonEmptyHashtable() {
-        assertEquals(5, examMarks.size());
+        assertEquals(5, this.examMarks.size());
     }
 
     @Test
     void testRemoveExisting() {
-        assertNotNull(examMarks.get("Ante"));
-        int oldSize = examMarks.size();
+        assertNotNull(this.examMarks.get("Ante"));
+        int oldSize = this.examMarks.size();
 
-        examMarks.remove("Ante");
+        this.examMarks.remove("Ante");
 
-        assertNull(examMarks.get("Ante"));
-        assertNotEquals(oldSize, examMarks.size());
-        assertEquals(oldSize - 1, examMarks.size());
+        assertNull(this.examMarks.get("Ante"));
+        assertNotEquals(oldSize, this.examMarks.size());
+        assertEquals(oldSize - 1, this.examMarks.size());
     }
 
     @Test
     void testRemoveNonExisting() {
-        assertNull(examMarks.get("Ivica"));
-        int oldSize = examMarks.size();
+        assertNull(this.examMarks.get("Ivica"));
+        int oldSize = this.examMarks.size();
 
-        assertNull(examMarks.remove("Ivica"));
-        assertEquals(oldSize, examMarks.size());
-        assertNotEquals(oldSize - 1, examMarks.size());
+        assertNull(this.examMarks.remove("Ivica"));
+        assertEquals(oldSize, this.examMarks.size());
+        assertNotEquals(oldSize - 1, this.examMarks.size());
     }
 
     @Test
     void testRemoveDifferentType() {
-        assertNull(examMarks.get(12));
-        int oldSize = examMarks.size();
+        assertNull(this.examMarks.get(12));
+        int oldSize = this.examMarks.size();
 
-        assertNull(examMarks.remove(12));
-        assertEquals(oldSize, examMarks.size());
-        assertNotEquals(oldSize - 1, examMarks.size());
+        assertNull(this.examMarks.remove(12));
+        assertEquals(oldSize, this.examMarks.size());
+        assertNotEquals(oldSize - 1, this.examMarks.size());
     }
 
     @Test
     void testRemoveNull() {
-        assertNull(examMarks.remove(null));
+        assertNull(this.examMarks.remove(null));
     }
 
     @Test
     void testIsEmptyTrue() {
-        assertTrue(emptyHashtable.isEmpty());
+        assertTrue(this.emptyHashtable.isEmpty());
     }
 
     @Test
     void testIsEmptyFalse() {
-        assertFalse(examMarks.isEmpty());
+        assertFalse(this.examMarks.isEmpty());
     }
 
     @Test
     void testEmptyHashtableToArray() {
-        SimpleHashtable.TableEntry<Collection<String>,Integer> [] array = emptyHashtable.toArray();
+        SimpleHashtable.TableEntry<Collection<String>,Integer> [] array = this.emptyHashtable.toArray();
         assertEquals(0, array.length);
         for (SimpleHashtable.TableEntry<Collection<String>,Integer> element : array) {
             assertNull(element);
@@ -172,8 +174,8 @@ public class SimpleHashtableTest {
 
     @Test
     void testNonEmptyHashtableToArray() {
-        SimpleHashtable.TableEntry<String,Integer> [] array = examMarks.toArray();
-        assertEquals(examMarks.size(), array.length);
+        SimpleHashtable.TableEntry<String,Integer> [] array = this.examMarks.toArray();
+        assertEquals(this.examMarks.size(), array.length);
         for (SimpleHashtable.TableEntry<String,Integer> element : array) {
             assertNotNull(element);
         }
@@ -181,15 +183,15 @@ public class SimpleHashtableTest {
 
     @Test
     void testClearEmptyHashtable() {
-        SimpleHashtable.TableEntry<Collection<String>,Integer> [] array = emptyHashtable.toArray();
+        SimpleHashtable.TableEntry<Collection<String>,Integer> [] array = this.emptyHashtable.toArray();
         assertEquals(0, array.length);
         for (SimpleHashtable.TableEntry<Collection<String>,Integer> element : array) {
             assertNull(element);
         }
 
-        examMarks.clear();
+        this.examMarks.clear();
 
-        array = emptyHashtable.toArray();
+        array = this.emptyHashtable.toArray();
         assertEquals(0, array.length);
         for (SimpleHashtable.TableEntry<Collection<String>,Integer> element : array) {
             assertNull(element);
@@ -198,28 +200,28 @@ public class SimpleHashtableTest {
 
     @Test
     void testClearNonEmptyHashtable() {
-        SimpleHashtable.TableEntry<String,Integer> [] array = examMarks.toArray();
-        assertEquals(examMarks.size(), array.length);
+        SimpleHashtable.TableEntry<String,Integer> [] array = this.examMarks.toArray();
+        assertEquals(this.examMarks.size(), array.length);
         for (SimpleHashtable.TableEntry<String,Integer> element : array) {
             assertNotNull(element);
         }
 
-        examMarks.clear();
+        this.examMarks.clear();
 
-        array = examMarks.toArray();
+        array = this.examMarks.toArray();
         assertEquals(0, array.length);
-        assertEquals(examMarks.size(), array.length);
+        assertEquals(this.examMarks.size(), array.length);
         for (SimpleHashtable.TableEntry<String,Integer> element : array) {
             assertNull(element);
         }
 
-        assertNotEquals(new SimpleHashtable<>(8), examMarks); //not equal because of residual modificationCount
+        assertNotEquals(new SimpleHashtable<>(8), this.examMarks); //not equal because of residual modificationCount
     }
 
     @Test
     void testIterator() {
-        Iterator<SimpleHashtable.TableEntry<String,Integer>> iter = examMarks.iterator();
-        SimpleHashtable.TableEntry<String,Integer> [] array = examMarks.toArray();
+        Iterator<SimpleHashtable.TableEntry<String,Integer>> iter = this.examMarks.iterator();
+        SimpleHashtable.TableEntry<String,Integer> [] array = this.examMarks.toArray();
 
         int numberOfEntriesToGoThrough = examMarks.size();
         int numberOfEntriesGoneThrough = 0;
@@ -232,9 +234,72 @@ public class SimpleHashtableTest {
             numberOfEntriesGoneThrough++;
         }
 
-        assertNotEquals(numberOfEntriesToGoThrough, examMarks.size());
-        assertEquals(0, examMarks.size());
+        assertNotEquals(numberOfEntriesToGoThrough, this.examMarks.size());
+        assertEquals(0, this.examMarks.size());
         assertEquals(numberOfEntriesGoneThrough, numberOfEntriesToGoThrough);
+    }
+
+    @Test
+    void testIteratorHasNextWhenNewEntryAddedThrows() {
+        Iterator<SimpleHashtable.TableEntry<String,Integer>> iter = this.examMarks.iterator();
+        SimpleHashtable.TableEntry<String,Integer> [] array = this.examMarks.toArray();
+
+        int numberOfEntriesGoneThrough = 0;
+
+        while(iter.hasNext()) {
+            SimpleHashtable.TableEntry<String,Integer> pair = iter.next();
+            assertEquals(array[numberOfEntriesGoneThrough].getKey(), pair.getKey());
+            assertEquals(array[numberOfEntriesGoneThrough].getValue(), pair.getValue());
+            iter.remove();
+            numberOfEntriesGoneThrough++;
+        }
+
+        this.examMarks.put("Kiara", 3);
+
+        assertThrows(ConcurrentModificationException.class, iter::hasNext);
+    }
+
+    @Test
+    void testIteratorRemoveEntryWhenAlreadyModifiedThrows() {
+        Iterator<SimpleHashtable.TableEntry<String,Integer>> iter = this.examMarks.iterator();
+        SimpleHashtable.TableEntry<String,Integer> [] array = this.examMarks.toArray();
+
+        SimpleHashtable.TableEntry<String,Integer> pair = iter.next();
+        assertEquals(array[0].getKey(), pair.getKey());
+        assertEquals(array[0].getValue(), pair.getValue());
+        this.examMarks.put("Kiara", 3);
+        assertThrows(ConcurrentModificationException.class, iter::remove);
+
+    }
+
+    @Test
+    void testIteratorRemoveEntryWhenAlreadyRemovedThrows() {
+        Iterator<SimpleHashtable.TableEntry<String,Integer>> iter = this.examMarks.iterator();
+        SimpleHashtable.TableEntry<String,Integer> [] array = this.examMarks.toArray();
+
+        SimpleHashtable.TableEntry<String,Integer> pair = iter.next();
+        assertEquals(array[0].getKey(), pair.getKey());
+        assertEquals(array[0].getValue(), pair.getValue());
+        iter.remove();
+        assertThrows(IllegalStateException.class, iter::remove);
+    }
+
+    @Test
+    void testIteratorNextWhenEmptyThrows() {
+        Iterator<SimpleHashtable.TableEntry<String,Integer>> iter = this.examMarks.iterator();
+        SimpleHashtable.TableEntry<String,Integer> [] array = this.examMarks.toArray();
+
+        int numberOfEntriesGoneThrough = 0;
+
+        while(iter.hasNext()) {
+            SimpleHashtable.TableEntry<String,Integer> pair = iter.next();
+            assertEquals(array[numberOfEntriesGoneThrough].getKey(), pair.getKey());
+            assertEquals(array[numberOfEntriesGoneThrough].getValue(), pair.getValue());
+            iter.remove();
+            numberOfEntriesGoneThrough++;
+        }
+
+        assertThrows(NoSuchElementException.class, iter::next);
     }
 
 }

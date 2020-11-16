@@ -18,7 +18,12 @@ public class SmartScriptTester {
      * @param args an array of command-line arguments.
      */
     public static void main(String[] args) throws IOException {
-        String docBody = Files.readString(Paths.get("..."));
+        if (args.length != 1) {
+            System.err.println("Incorrect amount of arguments; expected 1, got " + args.length + "!");
+            return;
+        }
+
+        String docBody = Files.readString(Paths.get(args[0]));
         SmartScriptParser parser = new SmartScriptParser(docBody);
         DocumentNode document = parser.getDocumentNode();
         String originalDocumentBody = document.toString();

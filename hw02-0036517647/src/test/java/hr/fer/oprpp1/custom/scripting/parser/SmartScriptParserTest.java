@@ -20,11 +20,11 @@ public class SmartScriptParserTest {
 
     private String readExample(int n) {
         try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("extra/primjer"+n+".txt")) {
-            if(is==null) throw new RuntimeException("Datoteka extra/primjer"+n+".txt je nedostupna.");
+            if(is==null) throw new RuntimeException("File extra/primjer"+n+".txt is unavailable.");
             byte[] data = Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("extra/primjer" + n + ".txt")).readAllBytes();
             return new String(data, StandardCharsets.UTF_8);
         } catch(IOException ex) {
-            throw new RuntimeException("Greška pri čitanju datoteke.", ex);
+            throw new RuntimeException("Error while reading the file.", ex);
         }
     }
 
@@ -33,7 +33,7 @@ public class SmartScriptParserTest {
             byte[] data = Files.newInputStream(Paths.get("examples/doc"+n+".txt")).readAllBytes();
             return new String(data, StandardCharsets.UTF_8);
         } catch(IOException ex) {
-            throw new RuntimeException("Greška pri čitanju datoteke.", ex);
+            throw new RuntimeException("Error while reading the file.", ex);
         }
     }
 

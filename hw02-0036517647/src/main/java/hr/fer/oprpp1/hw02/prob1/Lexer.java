@@ -40,10 +40,11 @@ public class Lexer {
      */
     public Lexer(String text) {
         if (text == null) throw new NullPointerException("The input text cannot be null");
+
         this.data = text.toCharArray();
-        currentIndex = 0;
-        token = null;
-        state = LexerState.BASIC;
+        this.currentIndex = 0;
+        this.token = null;
+        this.state = LexerState.BASIC;
     }
 
     /**
@@ -144,19 +145,20 @@ public class Lexer {
                 break;
             }
 
-            if (this.data[i] == '\\' && this.isEOF(this.currentIndex+1)) {
+            if (this.data[i] == '\\' && this.isEOF(this.currentIndex+1)) { //xyz\EOF
                 throw new LexerException("Invalid escape!");
-            } else if (i-1>=0 && isWhitespace(this.data[i - 1]) && this.data[i] == '\\' && this.isEOF(this.currentIndex)) {
+            } else if (i-1>=0 && isWhitespace(this.data[i - 1]) && this.data[i] == '\\' && this.isEOF(this.currentIndex)) { //xyz \EOF
                 throw new LexerException("Invalid escape!");
-            } else if (i-1>=0 && this.data[i] == '\\' && this.data[i-1] == '\\' && ++escapeBackslashCounter % 2 != 0) {
+            } else if (i-1>=0 && this.data[i] == '\\' && this.data[i-1] == '\\' && ++escapeBackslashCounter % 2 != 0) { //safe from odd number of \
                 sb.append(this.data[i]);
                 continue;
-            } else if (i+1 < this.data.length && this.data[i] == '\\' && (this.isWhitespace(this.data[i+1]) || Character.isLetter(this.data[i+1]))) {
+            } else if (i+1 < this.data.length && this.data[i] == '\\' && (this.isWhitespace(this.data[i+1]) || Character.isLetter(this.data[i+1]))) { // \  or \letter
                 throw new LexerException("Invalid escape!");
-            } else if (i-1>=0 && !(Character.isLetter(this.data[i]) || this.data[i] == '\\') && this.data[i-1] != '\\') {
+            } else if (i-1>=0 && !(Character.isLetter(this.data[i]) || this.data[i] == '\\') && this.data[i-1] != '\\') { //a characher that is not a letter or a \ within a word
+                                                                                                                          // was not escaped
                 this.currentIndex--;
                 break;
-            } else if (this.data[i] == '\\') {
+            } else if (this.data[i] == '\\') { //safe escaping within a word
                 continue;
             }
 
@@ -230,6 +232,7 @@ public class Lexer {
                     break;
                 }
             }
+
             if (this.isWhitespace(this.data[i])) {
                 this.currentIndex--;
                 break;

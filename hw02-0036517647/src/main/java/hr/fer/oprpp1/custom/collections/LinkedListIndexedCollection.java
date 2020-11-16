@@ -9,7 +9,7 @@ import java.util.Objects;
  * Duplicate elements are allowed, while the storage of {@code null} references is not.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 2.1
  */
 public class LinkedListIndexedCollection implements List {
 
@@ -55,7 +55,18 @@ public class LinkedListIndexedCollection implements List {
             this.value = value;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ListNode)) return false;
+            ListNode listNode = (ListNode) o;
+            return Objects.equals(this.value, listNode.value);
+        }
 
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
     }
 
     /**
@@ -289,9 +300,9 @@ public class LinkedListIndexedCollection implements List {
         private final LinkedListIndexedCollection linkedListCollection;
 
         /**
-         * Position of the yet unfetched element that is sequentially first to be fetched.
+         * The next node that is to be fetched.
          */
-        private int toBeFetched;
+        private ListNode nextNode;
 
         /**
          * The number of modifications made on the collection at the moment of instancing this current elements getter.
@@ -306,8 +317,9 @@ public class LinkedListIndexedCollection implements List {
          */
         private LinkedListElementsGetter(LinkedListIndexedCollection linkedListCollection) {
             if (linkedListCollection == null) throw new NullPointerException("The given collection cannot be null!");
+
             this.linkedListCollection = linkedListCollection;
-            this.toBeFetched = 0;
+            this.nextNode = linkedListCollection.first;
             this.savedModificationCount = this.linkedListCollection.modificationCount;
         }
 
@@ -318,7 +330,7 @@ public class LinkedListIndexedCollection implements List {
                 throw new ConcurrentModificationException("The collection has been modified after instancing this element getter!");
             }
 
-            return this.toBeFetched < this.linkedListCollection.size;
+            return this.nextNode != null;
         }
 
 
@@ -331,7 +343,10 @@ public class LinkedListIndexedCollection implements List {
                 throw new NoSuchElementException("There are no elements in this collection that remain unfetched!");
             }
 
-            return this.linkedListCollection.get(toBeFetched++);
+            Object valueToReturn = this.nextNode.value;
+            this.nextNode = nextNode.next;
+
+            return valueToReturn;
         }
     }
 
@@ -357,5 +372,21 @@ public class LinkedListIndexedCollection implements List {
         }
 
         return currentNode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LinkedListIndexedCollection)) return false;
+        LinkedListIndexedCollection that = (LinkedListIndexedCollection) o;
+        return this.size == that.size &&
+                this.modificationCount == that.modificationCount &&
+                Objects.equals(this.first, that.first) &&
+                Objects.equals(this.last, that.last);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.size, this.first, this.last, this.modificationCount);
     }
 }

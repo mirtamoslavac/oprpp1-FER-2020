@@ -4,7 +4,7 @@ package hr.fer.oprpp1.hw02.prob1;
  * Thrown to indicate that something illegal happened while tokenizing.
  *
  * @author  mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class LexerException extends RuntimeException {
 
@@ -15,6 +15,7 @@ public class LexerException extends RuntimeException {
      * Constructs an {@code LexerException} with no detail message.
      */
     public LexerException() {
+        super();
     }
 
     /**
