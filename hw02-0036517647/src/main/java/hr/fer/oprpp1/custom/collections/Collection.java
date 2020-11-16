@@ -4,7 +4,7 @@ package hr.fer.oprpp1.custom.collections;
  * The {@code Collection} interface represents a general collection of objects.
  *
  * @author mirtamoslavac
- * @version 2.0
+ * @version 2.1
  */
 public interface Collection {
 
@@ -40,7 +40,7 @@ public interface Collection {
     boolean contains(Object value);
 
     /**
-     * Removes one occurrence of the given object, that exists within the current collection, from it.
+     * Removes one occurrence of the given object that exists within the current collection from it.
      *
      * @param value object whose single occurrence (of many possible) is to be removed from this collection.
      * @return {@code true} only if the collection contains the given value and removes it, {@code false} if otherwise

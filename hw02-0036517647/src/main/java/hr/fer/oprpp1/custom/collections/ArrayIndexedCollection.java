@@ -13,6 +13,7 @@ import static java.lang.System.arraycopy;
  * Duplicate elements are allowed, while the storage of {@code null} references is not.
  *
  * @author mirtamoslavac
+ * @version 2.0
  */
 public class ArrayIndexedCollection implements List {
 

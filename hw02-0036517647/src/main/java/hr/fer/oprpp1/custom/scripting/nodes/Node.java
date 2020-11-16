@@ -45,9 +45,10 @@ public abstract class Node {
     }
 
     /**
-     * Returns selected child.
+     * Fetches the selected child.
      *
      * @throws IndexOutOfBoundsException when the node does not have any children yet or the {@code index} is not within the range from 0 to {@code this.numberOfChildren}.
+     * @return the wanted child {@link Node} instance.
      */
     public Node getChild(int index) {
         if (this.children == null) throw new IndexOutOfBoundsException("Cannot get child if the node has no children yet!");
