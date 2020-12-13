@@ -24,6 +24,12 @@
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>hr.fer.oprpp1.fractals</groupId>
+            <artifactId>fractal-viewer</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
