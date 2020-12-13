@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static java.lang.Double.parseDouble;
 import static java.lang.Math.atan2;
 import static java.lang.Math.hypot;
 import static java.lang.Math.cos;
@@ -62,6 +63,8 @@ public class Complex {
      * Negative pure imaginary unit complex number.
      */
     public static final Complex IM_NEG = new Complex(0,-1);
+
+    private static final double EPSILON = 10E-8;
 
     /**
      * Creates a new zero complex number.
@@ -153,7 +156,7 @@ public class Complex {
     /**
      * Negates the current complex number.
      *
-     * @return  new {@code Complex} that is the negation of the current instance.
+     * @return new {@code Complex} that is the negation of the current instance.
      */
     public Complex negate() {
         return new Complex(-this.real, -this.imaginary);
@@ -204,13 +207,12 @@ public class Complex {
         return new Complex(magnitude * cos(angle), magnitude * sin(angle));
     }
 
-    //TODO redo this to show the entire complex number
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
         if(this.real != 0 || this.imaginary == 0) {
-            if(abs(this.real % 1) <= 10E-8) {
+            if(abs(this.real % 1) <= EPSILON) {
                 sb.append((int)this.real);
             } else {
                 sb.append(this.real);
@@ -226,7 +228,7 @@ public class Complex {
                 if (Math.signum(this.imaginary) == 1. && this.real != 0 || isNaN(this.imaginary)){
                     sb.append("+");
                 }
-                if(abs(this.imaginary % 1) <= 10E-8) {
+                if(abs(this.imaginary % 1) <= EPSILON) {
                     sb.append((int)this.imaginary).append("i");
                 } else {
                     sb.append(this.imaginary).append("i");
@@ -235,5 +237,77 @@ public class Complex {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Parses the real and imaginary parts of the current complex number from the given string {@code s} into a new {@code Complex} instance and adds it to the passed {@code
+     * roots} list if valid.
+     *
+     * @param s string that is to be parsed into a {@code Complex} instance.
+     * @param roots list containing roots to which the valid complex number is to be added.
+     * @throws NullPointerException when the given string {@code s} is empty.
+     * @return {@code true} if the string was able to be parsed into a complex number, {@code false} otherwise.
+     */
+    public static boolean parseAndAddToList(String s, List<Complex> roots) {
+        Objects.requireNonNull(s, "The string that is to be parsed into a complex number cannot be null!");
+
+        String regexRealAndImaginary = "^(([-+])?((\\d+|\\d*\\.?\\d+)|NaN|Infinity))\\s*(([-+])\\s*i((\\d*\\.?\\d*)|NaN|Infinity))$";
+        String regexReal = "^([-+])?((\\d+|\\d*\\.?\\d+)|NaN|Infinity)$";
+        String regexImaginary = "^([-+])?i((\\d*\\.?\\d*)|NaN|Infinity)$";
+
+        if (s.matches(regexRealAndImaginary)) {
+            s = s.replaceAll("\\s", "");
+
+            switch (s) {
+                case "0+i0", "0-i0", "+0+i0", "+0-i0", "-0+i0", "-0-i0" -> roots.add(Complex.ZERO);
+                case "1+i0", "+1+i0", "1-i0", "+1-i0" -> roots.add(Complex.ONE);
+                case "-1+i0", "-1-i0" -> roots.add(Complex.ONE_NEG);
+                case "0+i", "0+i1", "+0+i", "+0+i1", "-0+i", "-0+i1" -> roots.add(Complex.IM);
+                case "0-i", "0-i1", "+0-i", "+0-i1", "-0-i", "-0-i1" -> roots.add(Complex.IM_NEG);
+                default -> {
+                    boolean negativeReal = false;
+                    if (s.indexOf("+") == 0) {
+                        s = s.substring(1);
+                    }
+                    if (s.indexOf("-") == 0) {
+                        s = s.substring(1);
+                        negativeReal = true;
+                    }
+
+                    int operatorIndex;
+                    if (s.contains("+")) {
+                        operatorIndex = s.indexOf("+");
+                    } else {
+                        operatorIndex = s.indexOf("-");
+                    }
+
+                    double real = !negativeReal ? parseDouble(s.substring(0, operatorIndex)) : parseDouble("-" + s.substring(0, operatorIndex));
+
+                    s = s.replaceFirst("i", "");
+                    double imaginary = s.substring(operatorIndex).equals("+") ? 1 : s.substring(operatorIndex).equals("-") ? -1 : parseDouble(s.substring(operatorIndex));
+
+                    roots.add(new Complex(real, imaginary));
+                }
+            }
+            return true;
+        } else if (s.matches(regexReal)) {
+            switch (s) {
+                case "0", "+0", "-0" -> roots.add(Complex.ZERO);
+                case "1", "+1" -> roots.add(Complex.ONE);
+                case "-1" -> roots.add(Complex.ONE_NEG);
+                default -> roots.add(new Complex(parseDouble(s), 0.));
+            }
+            return true;
+        } else if (s.matches(regexImaginary)) {
+            switch (s) {
+                case "i0", "+i0", "-i0" -> roots.add(Complex.ZERO);
+                case "i", "+i" -> roots.add(Complex.IM);
+                case "-i" -> roots.add(Complex.IM_NEG);
+                default -> roots.add(new Complex(0., parseDouble(s.replaceFirst("i", ""))));
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

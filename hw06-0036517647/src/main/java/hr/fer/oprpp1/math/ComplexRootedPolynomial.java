@@ -94,6 +94,7 @@ public class ComplexRootedPolynomial {
         for (int i = 0, length = this.roots.length; i < length; i++) {
             if(i == 0) {
                 distance = z.sub(this.roots[i]).module();
+                index = i;
                 continue;
             }
 
