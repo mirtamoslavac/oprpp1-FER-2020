@@ -66,34 +66,73 @@ public class Calculator extends JFrame {
 
         this.invOperations = new LinkedHashMap<>(Map.of(
                 "2,1", new InverseButton("1/x", "1/x",
-                        e -> calcModel.setValue(1 / calcModel.getValue()), e -> calcModel.setValue(1 / calcModel.getValue())),
+                        e -> {
+                            if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                            calcModel.setValue(1 / calcModel.getValue());
+                        }, e -> {
+                    if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                    calcModel.setValue(1 / calcModel.getValue());
+                }, calcModel),
                 "3,1", new InverseButton("log", "10^x",
-                        e -> calcModel.setValue(log10(calcModel.getValue())), e -> calcModel.setValue(pow(10, calcModel.getValue()))),
+                        e -> {
+                            if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                            calcModel.setValue(log10(calcModel.getValue()));
+                        }, e -> {
+                    if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                    calcModel.setValue(pow(10, calcModel.getValue()));
+                }, calcModel),
                 "4,1", new InverseButton("ln", "e^x",
-                        e -> calcModel.setValue(log(calcModel.getValue())), e -> calcModel.setValue(pow(Math.E, calcModel.getValue()))),
+                        e -> {
+                            if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                            calcModel.setValue(log(calcModel.getValue()));
+                        }, e -> {
+                    calcModel.setValue(pow(Math.E, calcModel.getValue()));
+                    if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                }, calcModel),
                 "5,1", new InverseButton("x^n", "x^(1/n)", Math::pow, (double x, double n) -> pow(x, 1 / n), calcModel),
                 "2,2", new InverseButton("sin", "arcsin",
-                        e -> calcModel.setValue(sin(calcModel.getValue())), e -> calcModel.setValue(asin(calcModel.getValue()))),
+                        e -> {
+                            if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                            calcModel.setValue(sin(calcModel.getValue()));
+                        }, e -> {
+                    if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                    calcModel.setValue(asin(calcModel.getValue()));
+                }, calcModel),
                 "3,2", new InverseButton("cos", "arccos",
-                        e -> calcModel.setValue(cos(calcModel.getValue())), e -> calcModel.setValue(acos(calcModel.getValue()))),
+                        e -> {
+                            if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                            calcModel.setValue(cos(calcModel.getValue()));
+                        }, e -> {
+                    if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                    calcModel.setValue(acos(calcModel.getValue()));
+                }, calcModel),
                 "4,2", new InverseButton("tan", "arctan",
-                        e -> calcModel.setValue(tan(calcModel.getValue())), e -> calcModel.setValue(atan(calcModel.getValue()))),
+                        e -> {
+                            if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                            calcModel.setValue(tan(calcModel.getValue()));
+                        }, e -> {
+                    if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                    calcModel.setValue(atan(calcModel.getValue()));
+                }, calcModel),
                 "5,2", new InverseButton("ctg", "arcctg",
-                        e -> calcModel.setValue(1 / tan(calcModel.getValue())), e -> calcModel.setValue(1 / atan(calcModel.getValue())))));
+                        e -> {
+                            if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                            calcModel.setValue(1 / tan(calcModel.getValue()));
+                        }, e -> {
+                    if (calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
+                    calcModel.setValue(1 / atan(calcModel.getValue()));
+                }, calcModel)));
 
         this.binaryOperations = new LinkedHashMap<>(Map.of(
-                "2,6", new BinaryButton("/", (x, y) ->  x / y, calcModel),
-                "3,6", new BinaryButton("*", (x, y) ->  x * y, calcModel),
-                "4,6", new BinaryButton("-", (x, y) ->  x - y, calcModel),
-                "5,6", new BinaryButton("+", (x, y) ->  x + y, calcModel)));
+                "2,6", new BinaryButton("/", (x, y) -> x / y, calcModel),
+                "3,6", new BinaryButton("*", (x, y) -> x * y, calcModel),
+                "4,6", new BinaryButton("-", (x, y) -> x - y, calcModel),
+                "5,6", new BinaryButton("+", (x, y) -> x + y, calcModel)));
 
         this.options = new LinkedHashMap<>(Map.of(
-                "1,7", new CalcButton("clr",  e -> calcModel.clear()),
+                "1,7", new CalcButton("clr", e -> calcModel.clear()),
                 "2,7", new CalcButton("reset", e -> calcModel.clearAll()),
-                "3,7", new CalcButton("push", e -> {
-                    this.storageStack.push(calcModel.getValue());
-                    calcModel.clear();
-                }),
+                "3,7", new CalcButton("push", e -> this.storageStack.push(calcModel.getValue())),
                 "4,7", new CalcButton("pop", e -> {
                     if (this.storageStack.isEmpty()) throw new CalculatorInputException("Cannot pop from an empty stack!");
                     calcModel.setValue(this.storageStack.pop());
@@ -106,8 +145,8 @@ public class Calculator extends JFrame {
                     calcModel.setPendingBinaryOperation(null);
                     calcModel.setValue(calcModel.getActiveOperand());
                 }),
-                "5,4", new CalcButton("+/-",  e -> calcModel.swapSign()),
-                "5,5", new CalcButton(".",  e -> calcModel.insertDecimalPoint())));
+                "5,4", new CalcButton("+/-", e -> calcModel.swapSign()),
+                "5,5", new CalcButton(".", e -> calcModel.insertDecimalPoint())));
 
         setTitle("Java Calculator");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -155,7 +194,7 @@ public class Calculator extends JFrame {
 
         for (int n = 0, i = 5; i > 1; i--) {
             for (int j = 3; j < 6; n++, j++) {
-                if(i == 5 && j != 3) break;
+                if (i == 5 && j != 3) break;
                 int finalN = n;
                 container.add(new DigitButton(Integer.toString(finalN), e -> calcModel.insertDigit(finalN)), new RCPosition(i, j));
             }
@@ -177,7 +216,7 @@ public class Calculator extends JFrame {
 
         invertedCheckBox.addActionListener(listener -> {
             for (Map.Entry<String, InverseButton> invOperation : invOperations.entrySet()) {
-               invOperation.getValue().invert();
+                invOperation.getValue().invert();
             }
         });
 
@@ -189,9 +228,9 @@ public class Calculator extends JFrame {
     /**
      * Adds already specified buttons to the {@code container}.
      *
-     * @param entrySet set containing information about the buttons.
+     * @param entrySet  set containing information about the buttons.
      * @param container the container to which the buttons are to be added.
-     * @param <V> type of the buttons that are to be added to the container.
+     * @param <V>       type of the buttons that are to be added to the container.
      * @throws NullPointerException when the given {@code container} or {@code entrySet} are {@code null}.
      */
     private <V extends Component> void addToContainer(Set<Map.Entry<String, V>> entrySet, Container container) {
@@ -208,7 +247,24 @@ public class Calculator extends JFrame {
      * @param args an array of command-line arguments.
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(()-> new Calculator(new CalcModelImpl()).setVisible(true));
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+        System.setProperty("sun.awt.exception.handler", ExceptionHandler.class.getName());
+
+        SwingUtilities.invokeLater(() -> new Calculator(new CalcModelImpl()).setVisible(true));
+    }
+
+    public static class ExceptionHandler implements Thread.UncaughtExceptionHandler {
+        public void handle(Throwable thrown) {
+            handleException(Thread.currentThread().getName(), thrown);
+        }
+
+        public void uncaughtException(Thread thread, Throwable thrown) {
+            handleException(thread.getName(), thrown);
+        }
+
+        protected void handleException(String threadName, Throwable thrown) {
+            JOptionPane.showMessageDialog(null, thrown.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
 }
