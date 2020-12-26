@@ -210,7 +210,7 @@ public class BarChartComponent extends JComponent {
         }
 
         int referentSizeSmaller = (int)ceil(textHeight / 4.);
-        for (int step = this.barChart.getYStep(), i = 0, y = barChart.getYMin(), amount = this.barChart.getYMax() / step; i <= amount; i++) {
+        for (int step = this.barChart.getYStep(), i = 0, y = this.barChart.getYMin(), amount = this.barChart.getYMax() / step; i <= amount; i++) {
             int yOffset = zeroY - (int)(i * 1. / amount * yAxisLength);
             graphics2D.drawLine(zeroX, yOffset, zeroX - gapAndArrowSize, yOffset);
             String number = Integer.toString(y + step * i);
