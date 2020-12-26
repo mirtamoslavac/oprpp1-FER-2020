@@ -1,6 +1,7 @@
 package hr.fer.oprpp1.gui.calc.components;
 
 import hr.fer.oprpp1.gui.calc.model.CalcModel;
+import hr.fer.oprpp1.gui.calc.model.CalculatorInputException;
 
 import java.awt.event.ActionListener;
 import java.util.Objects;
@@ -43,8 +44,9 @@ public class InverseButton extends CalcButton {
      * @param invertedText the text that is to be displayed when inverse operations are toggled.
      * @param nonInvertedOperation action listener containing the unary operation that is to be performed when the button in the regular state is pressed.
      * @param invertedOperation action listener containing the unary operation that is to be performed when the button in the inverted state is pressed.
+     * @param calcModel the calculator model performing the operation.
      */
-    public InverseButton(String nonInvertedText, String invertedText, ActionListener nonInvertedOperation, ActionListener invertedOperation) {
+    public InverseButton(String nonInvertedText, String invertedText, ActionListener nonInvertedOperation, ActionListener invertedOperation, CalcModel calcModel) {
         super(nonInvertedText, nonInvertedOperation);
         this.inverted = false;
 
@@ -66,8 +68,8 @@ public class InverseButton extends CalcButton {
     public InverseButton(String nonInvertedText, String invertedText, DoubleBinaryOperator nonInvertedOperation, DoubleBinaryOperator invertedOperation, CalcModel calcModel) {
         this(nonInvertedText, invertedText, e -> {
             if (Objects.requireNonNull(calcModel, "The given calculator model cannot be null!").isActiveOperandSet()) {
+                if(calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
                 double result = calcModel.getPendingBinaryOperation().applyAsDouble(calcModel.getActiveOperand(), calcModel.getValue());
-                calcModel.setValue(result);
                 calcModel.freezeValue(Double.toString(result));
                 calcModel.setActiveOperand(result);
             } else calcModel.setActiveOperand(calcModel.getValue());
@@ -76,15 +78,15 @@ public class InverseButton extends CalcButton {
             calcModel.clear();
         }, e -> {
             if (Objects.requireNonNull(calcModel, "The given calculator model cannot be null!").isActiveOperandSet()) {
+                if(calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
                 double result = calcModel.getPendingBinaryOperation().applyAsDouble(calcModel.getActiveOperand(), calcModel.getValue());
-                calcModel.setValue(result);
                 calcModel.freezeValue(Double.toString(result));
                 calcModel.setActiveOperand(result);
             } else calcModel.setActiveOperand(calcModel.getValue());
 
-            calcModel.setPendingBinaryOperation(Objects.requireNonNull(invertedOperation, "The given binary inverse operation cannot be null!"));
+            calcModel.setPendingBinaryOperation(Objects.requireNonNull(invertedOperation, "The given binary operation cannot be null!"));
             calcModel.clear();
-        });
+        }, calcModel);
     }
 
     /**

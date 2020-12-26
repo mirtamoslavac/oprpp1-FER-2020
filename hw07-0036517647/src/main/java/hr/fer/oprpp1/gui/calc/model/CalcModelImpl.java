@@ -80,8 +80,8 @@ public class CalcModelImpl implements CalcModel{
         this.editable = false;
         this.currentValue = Math.abs(value);
         this.positive = !(value < 0);
-        this.currentInput = Double.toString(value);
-        this.frozenValue = this.currentInput;
+        this.currentInput = Double.toString(Math.abs(value));
+        this.frozenValue = null;
         this.notifyRegisteredListeners();
     }
 
@@ -110,16 +110,16 @@ public class CalcModelImpl implements CalcModel{
 
     @Override
     public void swapSign() throws CalculatorInputException {
-        if (!this.isEditable()) throw new CalculatorInputException("The number's sign cannot be flipped if the model is not editable!");
+        if (!this.isEditable()) throw new CalculatorInputException("The number's sign cannot be flipped if the calculator is not editable!");
 
         this.positive = !this.positive;
-        if (hasFrozenValue()) freezeValue(this.positive ? this.frozenValue.replaceAll("-", "") : "-" + this.frozenValue.replaceAll("-", ""));
+        this.frozenValue = null;
         this.notifyRegisteredListeners();
     }
 
     @Override
     public void insertDecimalPoint() throws CalculatorInputException {
-        if (!this.isEditable()) throw new CalculatorInputException("A decimal point cannot be inserted if the model is not editable!");
+        if (!this.isEditable()) throw new CalculatorInputException("A decimal point cannot be inserted if the calculator is not editable!");
         if (this.currentInput.contains(".")) throw new CalculatorInputException("The number already contains a decimal point!");
         if (this.currentInput.isEmpty()) throw new CalculatorInputException("No number had been entered previously!");
 
@@ -129,6 +129,7 @@ public class CalcModelImpl implements CalcModel{
 
             this.currentInput = newInput;
             this.currentValue = newValue;
+            this.frozenValue = null;
             this.notifyRegisteredListeners();
         } catch (NumberFormatException | CalculatorInputException e) {
             throw new CalculatorInputException("The given value \"" + newInput + "\" cannot be parsed into a double!");
@@ -137,7 +138,7 @@ public class CalcModelImpl implements CalcModel{
 
     @Override
     public void insertDigit(int digit) throws CalculatorInputException, IllegalArgumentException {
-        if (!this.isEditable()) throw new CalculatorInputException("A digit cannot be inserted if the model is not editable!");
+        if (!this.isEditable()) throw new CalculatorInputException("A digit cannot be inserted if the calculator is not editable!");
         if (!isDigit(digit + 48)) throw new IllegalArgumentException("Cannot parse the given input to a digit! Expected 0-9, got " + digit + "!");
         String newInput = (this.currentInput + digit).replaceFirst("^0+(?!(\\.|$))", "");
 
@@ -147,7 +148,7 @@ public class CalcModelImpl implements CalcModel{
 
             this.currentInput = newInput;
             this.currentValue = newValue;
-            freezeValue(this.positive ? newInput : "-" + newInput);
+            this.frozenValue = null;
             this.notifyRegisteredListeners();
         } catch (NumberFormatException e) {
             newInput = this.positive ? newInput : "-" + newInput;

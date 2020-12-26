@@ -1,6 +1,7 @@
 package hr.fer.oprpp1.gui.calc.components;
 
 import hr.fer.oprpp1.gui.calc.model.CalcModel;
+import hr.fer.oprpp1.gui.calc.model.CalculatorInputException;
 
 import java.util.Objects;
 import java.util.function.DoubleBinaryOperator;
@@ -25,8 +26,8 @@ public class BinaryButton extends CalcButton {
     public BinaryButton(String text, DoubleBinaryOperator binaryOperation, CalcModel calcModel) {
         super(text, e -> {
             if (Objects.requireNonNull(calcModel, "The given calculator model cannot be null!").isActiveOperandSet()) {
+                if(calcModel.hasFrozenValue()) throw new CalculatorInputException("The result has been frozen!");
                 double result = calcModel.getPendingBinaryOperation().applyAsDouble(calcModel.getActiveOperand(), calcModel.getValue());
-                calcModel.setValue(result);
                 calcModel.freezeValue(Double.toString(result));
                 calcModel.setActiveOperand(result);
             } else calcModel.setActiveOperand(calcModel.getValue());
