@@ -15,7 +15,7 @@ import java.util.List;
  * The {@code HexdumpShellCommand} class enables representing the hex-output of a given file.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class HexdumpShellCommand implements ShellCommand {
     /**
@@ -37,7 +37,7 @@ public class HexdumpShellCommand implements ShellCommand {
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         CommandUtils.checkArguments(env, arguments);
-        String[] argumentsArray = arguments.trim().split("\\s+");
+        String[] argumentsArray = CommandUtils.checkPathWithSpaces(arguments.trim().split("\\s+"));
 
         if (argumentsArray.length != 1) {
             CommandUtils.singleArgument(env, COMMAND_NAME, argumentsArray.length);

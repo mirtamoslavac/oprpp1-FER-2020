@@ -16,7 +16,7 @@ import java.util.List;
  * The {@code CopyShellCommand} class enables copying content from one file to another. It implements {@link ShellCommand}.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class CopyShellCommand implements ShellCommand {
     /**
@@ -38,7 +38,7 @@ public class CopyShellCommand implements ShellCommand {
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         CommandUtils.checkArguments(env, arguments);
-        String[] argumentsArray = arguments.trim().split("\\s+");
+        String[] argumentsArray = CommandUtils.checkPathWithSpaces(arguments.trim().split("\\s+"));
 
         if(argumentsArray[0].equals("")) {
             CommandUtils.twoArguments(env, COMMAND_NAME, 0);

@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  * The {@code LsShellCommand} class enables writing the directory listing of the given directory to the console. It implements {@link ShellCommand}.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class LsShellCommand implements ShellCommand {
     /**
@@ -43,7 +43,7 @@ public class LsShellCommand implements ShellCommand {
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         CommandUtils.checkArguments(env, arguments);
-        String[] argumentsArray = arguments.trim().split("\\s+");
+        String[] argumentsArray = CommandUtils.checkPathWithSpaces(arguments.trim().split("\\s+"));
 
         if (argumentsArray.length != 1) {
             CommandUtils.singleArgument(env, COMMAND_NAME, argumentsArray.length);

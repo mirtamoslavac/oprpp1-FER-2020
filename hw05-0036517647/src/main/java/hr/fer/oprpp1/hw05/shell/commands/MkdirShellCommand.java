@@ -14,7 +14,7 @@ import java.util.List;
  * The {@code MkdirShellCommand} class enables creating a directory structure within the current working directory. It implements {@link ShellCommand}.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class MkdirShellCommand implements ShellCommand {
     /**
@@ -31,7 +31,7 @@ public class MkdirShellCommand implements ShellCommand {
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         CommandUtils.checkArguments(env, arguments);
-        String[] argumentsArray = arguments.trim().split("\\s+");
+        String[] argumentsArray = CommandUtils.checkPathWithSpaces(arguments.trim().split("\\s+"));
 
         if (argumentsArray.length != 1 || argumentsArray[0].isBlank())
             CommandUtils.singleArgument(env, COMMAND_NAME, argumentsArray.length == 1 ? 0 : argumentsArray.length);

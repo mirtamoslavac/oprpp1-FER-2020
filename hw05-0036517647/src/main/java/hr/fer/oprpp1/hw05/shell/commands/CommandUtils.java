@@ -6,13 +6,15 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * The {@code CommandUtils} class contains methods used by multiple commands that implement {@link hr.fer.oprpp1.hw05.shell.ShellCommand}.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class CommandUtils {
     /**
@@ -144,6 +146,41 @@ public class CommandUtils {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Adapts the command arguments to allow for a string to be a single argument when containing spaces and surrounded with quotes.
+     *
+     * @param previousArguments arguments separated by whitespace.
+     * @throws NullPointerException when the given {@code previousArguments} is {@code null}.
+     * @return array with adapted arguments.
+     */
+    public static String[] checkPathWithSpaces(String[] previousArguments) {
+        List<String> newArguments = new ArrayList<>();
+
+        for (int i = 0, arraySize = Objects.requireNonNull(previousArguments, "The given argyments cannot be null!").length; i < arraySize; i++) {
+            if (previousArguments[i].startsWith("\"") && previousArguments[i].endsWith("\"")) {
+                newArguments.add(previousArguments[i].replace("\"", ""));
+            } else if (previousArguments[i].startsWith("\"")) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(previousArguments[i]);
+                int numberOfAppended = 0;
+
+                for (int j = i + 1; j < arraySize; j++) {
+                    if (previousArguments[j].endsWith("\"")) {
+                        sb.append(" ").append(previousArguments[j]);
+                        i += ++numberOfAppended;
+                        break;
+                    }
+                    sb.append(" ").append(previousArguments[j]);
+                    numberOfAppended++;
+                }
+
+                newArguments.add(sb.toString().replace("\"", ""));
+            } else newArguments.add(previousArguments[i]);
+        }
+
+        return newArguments.toArray(new String[newArguments.size()]);
     }
 
 }

@@ -17,7 +17,7 @@ import java.util.List;
  * The {@code CatShellCommand} class enables reading and displaying the content of a specific file on the console. It implements {@link ShellCommand}.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class CatShellCommand implements ShellCommand {
     /**
@@ -35,7 +35,7 @@ public class CatShellCommand implements ShellCommand {
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         CommandUtils.checkArguments(env, arguments);
-        String[] argumentsArray = arguments.trim().split("\\s+");
+        String[] argumentsArray = CommandUtils.checkPathWithSpaces(arguments.trim().split("\\s+"));
 
         if (argumentsArray.length > 2) {
             CommandUtils.oneOrTwoArguments(env, COMMAND_NAME, argumentsArray.length);
