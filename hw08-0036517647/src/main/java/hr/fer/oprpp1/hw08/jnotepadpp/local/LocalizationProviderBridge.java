@@ -43,7 +43,10 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
         if (this.connected) return;
         this.connected = true;
         this.parent.addLocalizationListener(this.listener);
-        if (this.cachedLanguage != null && !this.cachedLanguage.equals(this.parent.getCurrentLanguage())) fire();
+        if (this.cachedLanguage != null && !this.cachedLanguage.equals(this.parent.getCurrentLanguage())) {
+            fire();
+            this.cachedLanguage = this.parent.getCurrentLanguage();
+        }
     }
 
     /**

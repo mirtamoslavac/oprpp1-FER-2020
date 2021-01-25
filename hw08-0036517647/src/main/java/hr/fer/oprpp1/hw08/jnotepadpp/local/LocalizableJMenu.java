@@ -19,10 +19,6 @@ public class LocalizableJMenu extends JMenu {
      * The provider used to retrieve localization information.
      */
     private final ILocalizationProvider prov;
-    /**
-     * The listener that is to be registered on the {@code prov}.
-     */
-    private final ILocalizationListener listener;
 
     /**
      * Creates a new {@code LocalizableJMenu} with the given {@code key} that is retrieved through the {@code lp}.
@@ -33,8 +29,7 @@ public class LocalizableJMenu extends JMenu {
     public LocalizableJMenu(String key, ILocalizationProvider lp) {
         this.key = key;
         this.prov = lp;
-        this.listener = this::setLocalizedText;
-        this.prov.addLocalizationListener(this.listener);
+        this.prov.addLocalizationListener(this::setLocalizedText);
         this.setLocalizedText();
     }
 

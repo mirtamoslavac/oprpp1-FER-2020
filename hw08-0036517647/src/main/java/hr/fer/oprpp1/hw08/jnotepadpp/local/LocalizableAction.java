@@ -24,11 +24,6 @@ public abstract class LocalizableAction extends AbstractAction {
      */
     private final ILocalizationProvider prov;
     /**
-     * The listener that is to be registered on the {@code prov}.
-     */
-    private final ILocalizationListener listener;
-
-    /**
      * Creates a new {@code LocalizableAction} with the given {@code key} that is retrieved through the {@code lp}.
      *
      * @param key the key used for the retrieval of the value from the given provider.
@@ -37,8 +32,7 @@ public abstract class LocalizableAction extends AbstractAction {
     public LocalizableAction(String key, ILocalizationProvider lp) {
         this.key = key;
         this.prov = lp;
-        this.listener = this::putValues;
-        this.prov.addLocalizationListener(this.listener);
+        this.prov.addLocalizationListener(this::putValues);
         this.putValues();
     }
 
