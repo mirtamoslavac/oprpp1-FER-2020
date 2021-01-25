@@ -25,7 +25,7 @@ import java.util.function.Function;
  * The {@code JNotepadPP} class is a simple Swing text editor, allowing the user to work with multiple documents at the same time.
  *
  * @author mirtamoslavac
- * @version 1.1
+ * @version 1.2
  */
 public class JNotepadPP extends JFrame {
     @java.io.Serial
@@ -137,6 +137,7 @@ public class JNotepadPP extends JFrame {
                     int mark = caret.getMark();
                     setDocumentModificationActionEnablement(dot != mark);
                     setDocumentActionEnablement(true);
+                    saveDocumentAction.setEnabled(currentModel.isModified());
                     setTitle((currentModel.getFilePath() == null ?
                             flp.getString("unnamed") :
                             currentModel.getFilePath().getFileName().toString()) + " - " + APPLICATION_TITLE);
@@ -272,15 +273,7 @@ public class JNotepadPP extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SingleDocumentModel currentDocument = multipleDocumentModel.getCurrentDocument();
-
-                try {
-                    currentDocument.setFilePath(getPathForSaveAs());
-                } catch (NullPointerException e1) {
-                    return;
-                }
-
-                multipleDocumentModel.saveDocument(currentDocument, currentDocument.getFilePath());
+                saveDocumentAs(false);
             }
         };
 
@@ -648,14 +641,58 @@ public class JNotepadPP extends JFrame {
         SingleDocumentModel currentDocument = this.multipleDocumentModel.getCurrentDocument();
 
         if (currentDocument.getFilePath() == null) {
-            try {
-                currentDocument.setFilePath(getPathForSaveAs());
-            } catch (NullPointerException e) {
-                if (close) throw new NullPointerException();
-                else return;
-            }
-            this.multipleDocumentModel.saveDocument(currentDocument, currentDocument.getFilePath());
+            saveDocumentAs(close);
+//            try {
+//                currentDocument.setFilePath(getPathForSaveAs());
+//            } catch (NullPointerException e) {
+//                if (close) throw new NullPointerException();
+//                else return;
+//            }
+//            this.multipleDocumentModel.saveDocument(currentDocument, currentDocument.getFilePath());
         } else this.multipleDocumentModel.saveDocument(currentDocument, null);
+    }
+
+    /**
+     * Saves the currently open document to a new path.
+     *
+     * @param close {@code true} the saving occurs while closing the document, {@code false} otherwise.
+     */
+    private void saveDocumentAs(boolean close) {
+        SingleDocumentModel currentDocument = this.multipleDocumentModel.getCurrentDocument();
+        Path newPath;
+        try {
+            newPath = getPathForSaveAs();
+            if (newPath == null) throw new NullPointerException();
+        } catch (NullPointerException e1) {
+            if (close) throw new NullPointerException();
+            else return;
+        }
+        if (new File(newPath.toAbsolutePath().normalize().toString()).exists()) {
+            String[] options = new String[]{flp.getString("yes"), this.flp.getString("no"), this.flp.getString("cancel")};
+            int res = JOptionPane.showOptionDialog(JNotepadPP.this,
+                    String.format(flp.getString("alreadyExists"), newPath.getFileName()),
+                    this.flp.getString("warning"),
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+            switch (res) {
+                case JOptionPane.CLOSED_OPTION:
+                case 2:
+                case 1:
+                    return;
+                case 0:
+                    try {
+                        this.multipleDocumentModel.saveDocument(currentDocument, newPath);
+                        currentDocument.setFilePath(newPath);
+                        setTitle(currentDocument.getFilePath().getFileName().toString() + " - " + APPLICATION_TITLE);
+                    } catch (NullPointerException e1) {
+                        return;
+                    }
+                    return;
+            }
+        }
+
+        this.multipleDocumentModel.saveDocument(currentDocument, currentDocument.getFilePath());
+        currentDocument.setFilePath(newPath);
+        setTitle(currentDocument.getFilePath().getFileName().toString() + " - " + APPLICATION_TITLE);
     }
 
     /**
@@ -672,6 +709,7 @@ public class JNotepadPP extends JFrame {
                     this.flp.getString("warning"),
                     JOptionPane.ERROR_MESSAGE,
                     new String[]{this.informUserOption});
+            return null;
         }
         return jfc.getSelectedFile().toPath();
     }
