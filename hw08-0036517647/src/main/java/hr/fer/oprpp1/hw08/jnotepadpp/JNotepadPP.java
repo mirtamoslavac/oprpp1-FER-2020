@@ -25,7 +25,7 @@ import java.util.function.Function;
  * The {@code JNotepadPP} class is a simple Swing text editor, allowing the user to work with multiple documents at the same time.
  *
  * @author mirtamoslavac
- * @version 1.0
+ * @version 1.1
  */
 public class JNotepadPP extends JFrame {
     @java.io.Serial
@@ -59,10 +59,11 @@ public class JNotepadPP extends JFrame {
     /**
      * Localizable actions that can be performed by the user within the application.
      */
-    private LocalizableAction createBlankDocumentAction,openDocumentAction, saveDocumentAction, saveDocumentAsAction,
+    private LocalizableAction createBlankDocumentAction, openDocumentAction, saveDocumentAction, saveDocumentAsAction,
             closeCurrentDocumentAction, copyTextAction, cutTextAction, pasteTextAction, getDocumentStatisticsAction, exitAction,
             toLowercaseAction, toUppercaseAction, invertCaseAction, sortAscendingAction, sortDescendingAction, uniqueAction,
             changeLanguageToEnglishAction, changeLanguageToCroatianAction, changeLanguageToGermanAction;
+
     /**
      * Creates a new {@code JNotepadPP} instance and initializes it.
      */
@@ -147,17 +148,18 @@ public class JNotepadPP extends JFrame {
 
             @Override
             public void documentAdded(SingleDocumentModel model) {
-               model.getTextComponent().getCaret().addChangeListener(e -> {
-                   Caret caret = model.getTextComponent().getCaret();
-                   setDocumentModificationActionEnablement(caret.getDot() != caret.getMark());
+                model.getTextComponent().getCaret().addChangeListener(e -> {
+                    Caret caret = model.getTextComponent().getCaret();
+                    setDocumentModificationActionEnablement(caret.getDot() != caret.getMark());
 
-                   setLength(model);
-                   setDocumentInfo(model);
-               });
+                    setLength(model);
+                    setDocumentInfo(model);
+                });
             }
 
             @Override
-            public void documentRemoved(SingleDocumentModel model) {}
+            public void documentRemoved(SingleDocumentModel model) {
+            }
         };
 
         this.multipleDocumentModel.addMultipleDocumentListener(mdl);
@@ -215,7 +217,7 @@ public class JNotepadPP extends JFrame {
      * Initializes all actions present within the application.
      */
     private void createActions() {
-        this.createBlankDocumentAction = new LocalizableAction("createBlankDocumentAction", this.flp){
+        this.createBlankDocumentAction = new LocalizableAction("createBlankDocumentAction", this.flp) {
             private static final long serialVersionUID = 3223560124922222221L;
 
             @Override
@@ -260,7 +262,7 @@ public class JNotepadPP extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveDocument();
+                saveDocument(false);
             }
         };
 
@@ -337,7 +339,7 @@ public class JNotepadPP extends JFrame {
                 int characterCount = documentText.length();
                 int nonBlankCharacterCount = documentText.replaceAll("\\s+", "").length();
                 int lineCount = currentDocument.getTextComponent().getLineCount();
-                String indentation = "\t " .repeat(7);
+                String indentation = "\t ".repeat(7);
                 informUser(JNotepadPP.this,
                         String.format(flp.getString("statisticalInfo"), indentation, characterCount, indentation, nonBlankCharacterCount, indentation, lineCount),
                         flp.getString("statisticalInfoTitle"),
@@ -391,7 +393,7 @@ public class JNotepadPP extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                performSelectionModification(text -> String.join("\n", new LinkedHashSet<>(Arrays.asList(text.split("\\r?\\n")))) + "\n",true);
+                performSelectionModification(text -> String.join("\n", new LinkedHashSet<>(Arrays.asList(text.split("\\r?\\n")))) + "\n", true);
             }
         };
 
@@ -405,7 +407,7 @@ public class JNotepadPP extends JFrame {
             }
         };
 
-        this.sortDescendingAction = new LocalizableAction("sortDescendingAction", this.flp){
+        this.sortDescendingAction = new LocalizableAction("sortDescendingAction", this.flp) {
             @java.io.Serial
             private static final long serialVersionUID = 986451321657561320L;
 
@@ -415,7 +417,7 @@ public class JNotepadPP extends JFrame {
             }
         };
 
-        this.changeLanguageToEnglishAction = new LocalizableAction("en", this.flp){
+        this.changeLanguageToEnglishAction = new LocalizableAction("en", this.flp) {
             @java.io.Serial
             private static final long serialVersionUID = 8923135465432131554L;
 
@@ -426,7 +428,7 @@ public class JNotepadPP extends JFrame {
             }
         };
 
-        this.changeLanguageToCroatianAction = new LocalizableAction("hr", this.flp){
+        this.changeLanguageToCroatianAction = new LocalizableAction("hr", this.flp) {
             @java.io.Serial
             private static final long serialVersionUID = 986512316846513211L;
 
@@ -437,7 +439,7 @@ public class JNotepadPP extends JFrame {
             }
         };
 
-        this.changeLanguageToGermanAction = new LocalizableAction("de", this.flp){
+        this.changeLanguageToGermanAction = new LocalizableAction("de", this.flp) {
             @java.io.Serial
             private static final long serialVersionUID = 3333375444812111111L;
 
@@ -454,8 +456,8 @@ public class JNotepadPP extends JFrame {
      */
     private void setUpActions() {
         initiateAction(this.createBlankDocumentAction, "control N", KeyEvent.VK_N);
-        initiateAction(this.openDocumentAction,"control O", KeyEvent.VK_O);
-        initiateAction(this.saveDocumentAction,"control S", KeyEvent.VK_S);
+        initiateAction(this.openDocumentAction, "control O", KeyEvent.VK_O);
+        initiateAction(this.saveDocumentAction, "control S", KeyEvent.VK_S);
         initiateAction(this.saveDocumentAsAction, "control shift S", KeyEvent.VK_A);
         initiateAction(this.closeCurrentDocumentAction, "control W", KeyEvent.VK_W);
         initiateAction(this.copyTextAction, "control C", KeyEvent.VK_C);
@@ -472,7 +474,7 @@ public class JNotepadPP extends JFrame {
         initiateAction(this.changeLanguageToEnglishAction, "control shift E", KeyEvent.VK_E);
         initiateAction(this.changeLanguageToCroatianAction, "control shift H", KeyEvent.VK_H);
         initiateAction(this.changeLanguageToGermanAction, "control shift G", KeyEvent.VK_G);
-        
+
         this.saveDocumentAction.setEnabled(false);
         setDocumentActionEnablement(false);
         setDocumentModificationActionEnablement(false);
@@ -482,9 +484,9 @@ public class JNotepadPP extends JFrame {
     /**
      * Sets the given values of the given {@code action}.
      *
-     * @param action the action that is to be assigned with new values.
+     * @param action         the action that is to be assigned with new values.
      * @param acceleratorKey the keyboard shortcut for performing the application.
-     * @param mnemonicKey mnemonic key for determining the key stroke assigned to the given action.
+     * @param mnemonicKey    mnemonic key for determining the key stroke assigned to the given action.
      */
     private void initiateAction(Action action, String acceleratorKey, int mnemonicKey) {
         action.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(acceleratorKey));
@@ -639,15 +641,18 @@ public class JNotepadPP extends JFrame {
 
     /**
      * Saves the currently open document.
+     *
+     * @param close {@code true} the saving occurs while closing the document, {@code false} otherwise.
      */
-    private void saveDocument() {
+    private void saveDocument(boolean close) {
         SingleDocumentModel currentDocument = this.multipleDocumentModel.getCurrentDocument();
 
         if (currentDocument.getFilePath() == null) {
             try {
                 currentDocument.setFilePath(getPathForSaveAs());
-            } catch (NullPointerException e1) {
-                return;
+            } catch (NullPointerException e) {
+                if (close) throw new NullPointerException();
+                else return;
             }
             this.multipleDocumentModel.saveDocument(currentDocument, currentDocument.getFilePath());
         } else this.multipleDocumentModel.saveDocument(currentDocument, null);
@@ -693,7 +698,11 @@ public class JNotepadPP extends JFrame {
                 case 2:
                     return false;
                 case 0:
-                    saveDocument();
+                    try {
+                        saveDocument(true);
+                    } catch (NullPointerException e) {
+                        return false;
+                    }
                     break;
                 case 1:
                     break;
@@ -774,7 +783,7 @@ public class JNotepadPP extends JFrame {
         Collator collator = Collator.getInstance(new Locale(this.flp.getCurrentLanguage()));
 
         performSelectionModification(text -> {
-            String[] lines= text.split("\\r?\\n");
+            String[] lines = text.split("\\r?\\n");
 
             Arrays.sort(lines, sortActionType == SortActionType.ASCENDING ? collator : collator.reversed());
 
@@ -803,7 +812,7 @@ public class JNotepadPP extends JFrame {
      * Contains a generic implementation of the selection modification, while the specific modification is given through {@code modification}.
      *
      * @param modification specific act of modification.
-     * @param entireLine determines whether the entire lines of the selected text should be taken into consideration.
+     * @param entireLine   determines whether the entire lines of the selected text should be taken into consideration.
      */
     private void performSelectionModification(Function<String, String> modification, boolean entireLine) {
         SingleDocumentModel currentDocument = this.multipleDocumentModel.getCurrentDocument();
@@ -867,10 +876,10 @@ public class JNotepadPP extends JFrame {
     /**
      * Informs the user about the done action through a pop-up message, an instance of {@link JOptionPane}.
      *
-     * @param parent      the frame in which to display the pop-up.
-     * @param message     the message of the pop-up.
-     * @param title       the title of the pop-up.
-     * @param messageType the type of the pop-up.
+     * @param parent         the frame in which to display the pop-up.
+     * @param message        the message of the pop-up.
+     * @param title          the title of the pop-up.
+     * @param messageType    the type of the pop-up.
      * @param messageOptions the localized option within the pop-up.
      */
     public static void informUser(Component parent, String message, String title, int messageType, String[] messageOptions) {
